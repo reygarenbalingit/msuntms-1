@@ -38,11 +38,11 @@ return [
     'guards' => [
         'web' => [
             'driver' => 'session',
-            'provider' => 'users',
+            'provider' => 'users', 
         ],
 
         'api' => [
-            'driver' => 'token',
+            'driver' => 'passport',
             'provider' => 'users',
             'hash' => false,
         ],
@@ -75,6 +75,7 @@ return [
         //     'driver' => 'database',
         //     'table' => 'users',
         // ],
+        
     ],
 
     /*
@@ -98,6 +99,7 @@ return [
             'table' => 'password_resets',
             'expire' => 60,
         ],
+        
     ],
 
 ];
