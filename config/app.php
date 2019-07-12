@@ -164,7 +164,8 @@ return [
         /*
          * Package Service Providers...
          */
-
+        Felixkiss\UniqueWithValidator\ServiceProvider::class,
+        Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
         /*
          * Application Service Providers...
          */
@@ -173,7 +174,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        Felixkiss\UniqueWithValidator\ServiceProvider::class,
+        
 
     ],
 

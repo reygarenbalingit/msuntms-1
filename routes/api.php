@@ -13,21 +13,34 @@ use App\School;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
 // //login routes
 // Route::post('/login', 'LoginController@login')->name('login');
-Route::post('login', 'AuthController@login');
-Route::post('register', 'AuthController@signup');
+// Route::post('login', 'AuthController@login');
+// Route::post('register', 'AuthController@signup');
 
 
 //logout private
-Route::middleware('auth:api')->group(function (){
-	Route::get('logout','AuthController@logout');
-	Route::get('user', 'AuthController@user');
+// Route::middleware('auth:api')->group(function (){
+// 	Route::get('logout','AuthController@logout');
+// 	Route::get('user', 'AuthController@user');
+// });
+
+Route::group(['prefix' => '/auth', ['middleware' => 'throttle:20,5']], function(){
+	Route::post('/register', 'Auth\RegisterController@register');
+	Route::post('/login', 'Auth\LoginController@login');
 });
+
+Route::group(['middleware' => 'jwt.auth'], function(){
+	Route::get('/user_me', 'MineController@index');
+	Route::get('/auth/user_logout', 'MineController@logout');
+});
+
+
+
 
 Route::get('school', 'SchoolController@index');
 Route::get('school/{id}', 'SchoolController@show');

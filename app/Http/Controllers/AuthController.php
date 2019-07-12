@@ -41,7 +41,6 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-
         $user = User::where('username',$request->username)->first();
         if($user){
         	if($request->password == $user->password){
