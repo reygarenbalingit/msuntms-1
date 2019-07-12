@@ -29,9 +29,14 @@ class CoursesController extends Controller
     	]);
 
     	if($v->fails()){
-    		return response()->json(['error' => 'Course already exist!']);
+    		return response()->json(['errors' => ['courseError' => 'Course already exist!']],422);
     	}else{
-    		return Courses::create($request->all());
+    		$courses = Courses::create($request->all());
+            return response()->json([
+                'success' => true,
+                'data' => $courses,
+                'message' => 'Course created sucessfully'
+            ], 200);
     	}	
     }
 

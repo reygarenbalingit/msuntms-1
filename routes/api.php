@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use App\School;
+use App\Courses;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -30,8 +31,8 @@ use App\School;
 // });
 
 Route::group(['prefix' => '/auth', ['middleware' => 'throttle:20,5']], function(){
-	Route::post('/register', 'Auth\RegisterController@register');
-	Route::post('/login', 'Auth\LoginController@login');
+	Route::post('/register', 'api\Auth\RegisterController@register');
+	Route::post('/login', 'api\Auth\LoginController@login');
 });
 
 Route::group(['middleware' => 'jwt.auth'], function(){
@@ -40,13 +41,14 @@ Route::group(['middleware' => 'jwt.auth'], function(){
 });
 
 
-
+//Route::group(['middleware' => 'jwt.auth'], function(){});
 
 Route::get('school', 'SchoolController@index');
 Route::get('school/{id}', 'SchoolController@show');
 Route::post('school', 'SchoolController@store');
 Route::put('school/{id}', 'SchoolController@update');
 Route::delete('school/{id}', 'SchoolController@delete');
+
 
 Route::get('course', 'CoursesController@index');
 Route::get('course/{id}', 'CoursesController@show');
