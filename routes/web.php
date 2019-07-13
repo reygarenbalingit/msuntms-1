@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return 'Hello World';
+    alert('Hello World!');
 });
 
 

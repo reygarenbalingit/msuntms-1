@@ -36,12 +36,14 @@ Route::group(['prefix' => '/auth', ['middleware' => 'throttle:20,5']], function(
 });
 
 Route::group(['middleware' => 'jwt.auth'], function(){
-	Route::get('/user_me', 'MineController@index');
-	Route::get('/auth/user_logout', 'MineController@logout');
+	Route::get('/user_me', 'api\MineController@index');
+	Route::get('/auth/user_logout', 'api\MineController@logout');
 });
 
 
-//Route::group(['middleware' => 'jwt.auth'], function(){});
+//Route::group(['middleware' => 'jwt.auth'], function(){
+	//ROUTES THAT NEED AUTHENTICATION HERE
+//});
 
 Route::get('school', 'SchoolController@index');
 Route::get('school/{id}', 'SchoolController@show');

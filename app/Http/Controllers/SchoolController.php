@@ -17,7 +17,7 @@ class SchoolController extends Controller
     		return School::find($id);
     	}else{
     		return response()->json([
-    			'error' => 'Record not found'
+    			'message' => 'Record not found'
     		], 404);
     	}
     }
@@ -29,23 +29,56 @@ class SchoolController extends Controller
     	]);
 
     	if($v->fails()){
-    		return response()->json(['error' => 'School already exist!']);
+    		return response()->json([
+                'success' => false,
+                'message' => 'School already exist!'
+            ], 422);
     	}else{
-    		return School::create($request->all());
+    		$newschool = School::create($request->all());
+            return response()->json([
+                'success' => true, 
+                'data' => $newschool,
+                'message' => 'School has been added successfully'
+            ], 200);
     	}	
     }
 
     public function update(Request $request, $id){
     	//test in postman using parameters URL
     	$school = School::findOrFail($id);
-    	$school->update($request->all());
-    	return $school;
+        $v = Validator::make($request->all(), [
+            'school_name' => 'required|unique:schools',
+        ]);
+
+        if($v->fails()){
+            return response()->json([
+                'success' => false,
+                'message' => 'School already exist! Cannot update current record.'
+            ], 422);
+        }else{
+            $school->update($request->all());
+            return response()->json([
+                'success' => true,
+                'data' => $school,
+                'message' => 'School has been updated successfully!'
+            ], 200);
+        }
+    	
     }
 
     public function delete(Request $request, $id){
-    	$school = School::findOrFail($id);
-    	$school->delete();
-    	return response()->json(['success' => 'School has been deleted.']);
+        if(!empty(School::find($id))){
+            School::findOrFail($id)->delete();
+            return response()->json([
+                'success' => true,
+                'message' => 'School has been deleted successfully.'
+            ], 200);
+        }else{
+            return response()->json([
+                'success' => false,
+                'message' => 'Record does not exist. Cannot delete.'
+            ], 404);
+        }
     }
 }
                 
