@@ -48,8 +48,6 @@ class TraineeController extends Controller
 			ec_lname,
 			ec_contact_number,
 			ec_address,
-	 		
-
 			if false{insert}else{use ids}
     	*/
 
@@ -65,11 +63,11 @@ class TraineeController extends Controller
                 'message' => $v->errors(),
             ], 422);
     	}else{
-    		$courseID;
-    		$schoolID;
-    		$ecID;
+    		$courseID = 0;
+    		$schoolID = 0;
+    		$ecID = 0;
 
-    		if($request->c_flag == false){
+    		if($request->c_flag === "x"){
     			$courses = new Courses;
     			$courses->course_text = $request->c_course_text;
     			$courses->save();
@@ -78,7 +76,7 @@ class TraineeController extends Controller
     			$courseID = $request->course_idcourse;
     		}
 
-    		if($request->s_flag == false){
+    		if($request->s_flag === "x"){
     			$schools = new School;
     			$schools->school_name = $request->s_school_name;
     			$schools->save();
@@ -87,7 +85,7 @@ class TraineeController extends Controller
     			$schoolID = $request->school_idschool;
     		}
 
-    		if($request->ec_flag == false){
+    		if($request->ec_flag === "x"){
     			$ec = new EmergencyContacts;
     			$ec->fname = $request->ec_fname;
     			$ec->mname = $request->ec_mname;
@@ -155,7 +153,7 @@ class TraineeController extends Controller
 			'trainee_home_add' => $data['trainee_home_add'],
 			'trainee_sex' => $data['trainee_sex'],
 			'trainee_contact_no' => $data['trainee_contact_no'],
-			'trainee_no_of_hrs' => $data['trainee_no_of_hrs'],
+			'required_no_of_hrs' => $data['required_no_of_hrs'],
 			'purpose_of_stay' => $data['purpose_of_stay'],
 			'course_idcourse' => $courseID,
 			'school_idschool' => $schoolID,
