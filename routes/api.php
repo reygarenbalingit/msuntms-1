@@ -64,4 +64,8 @@ Route::post('ec', 'EmergencyContactsController@store');
 Route::put('ec/{id}', 'EmergencyContactsController@update');
 Route::delete('ec/{id}', 'EmergencyContactsController@delete');
 
-Route::post('addtrainee', 'AddTraineeController@addTrainee');
+Route::post('trainee', 'TraineeController@store');
+Route::get('trainee', 'TraineeController@index');
+Route::get('trainee/{id}', 'TraineeController@show');
+Route::put('trainee/{id}', 'TraineeController@update');
+Route::delete('trainee/{id}', 'TraineeController@delete');

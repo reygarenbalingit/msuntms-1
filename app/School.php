@@ -8,5 +8,5 @@ class School extends Model
 {
 	protected $table = "schools";
 	public $primarykey = 'id';
-	protected $fillable = ['id','school_name', 'address', 'updated_at', 'created_at'];
+	protected $fillable = ['id','school_name', 'updated_at', 'created_at'];
 }
