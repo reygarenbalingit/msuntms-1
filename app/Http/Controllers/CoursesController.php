@@ -70,7 +70,7 @@ class CoursesController extends Controller
         if(!empty(Courses::find($id))){
             Courses::findOrFail($id)->delete();
             return response()->json([
-                'success' => false,
+                'success' => true,
                 'message' => 'School has been deleted.'
             ], 200);
         }else{
