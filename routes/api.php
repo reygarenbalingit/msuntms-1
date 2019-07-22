@@ -69,3 +69,14 @@ Route::get('trainee', 'TraineeController@index');
 Route::get('trainee/{id}', 'TraineeController@show');
 Route::put('trainee/{id}', 'TraineeController@update');
 Route::delete('trainee/{id}', 'TraineeController@delete');
+
+
+
+Route::group(['middleware' => 'jwt.auth'], function(){
+	Route::post('trainings', 'TrainingController@store');
+	Route::get('trainings', 'TrainingController@index');
+	Route::get('trainings/{id}', 'TrainingController@show');
+	Route::put('trainings/{id}','TrainingController@update');
+	Route::delete('trainings/{id}', 'TrainingController@delete');
+});
+

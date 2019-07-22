@@ -48,6 +48,9 @@ class TraineeController extends Controller
 			ec_lname,
 			ec_contact_number,
 			ec_address,
+			course_idcourse,
+			school_idschool
+			emergency_contact
 			if false{insert}else{use ids}
     	*/
 
@@ -67,7 +70,7 @@ class TraineeController extends Controller
     		$schoolID = 0;
     		$ecID = 0;
 
-    		if($request->c_flag === "x"){
+    		if($request->c_flag){
     			$courses = new Courses;
     			$courses->course_text = $request->c_course_text;
     			$courses->save();
@@ -76,7 +79,7 @@ class TraineeController extends Controller
     			$courseID = $request->course_idcourse;
     		}
 
-    		if($request->s_flag === "x"){
+    		if($request->s_flag){
     			$schools = new School;
     			$schools->school_name = $request->s_school_name;
     			$schools->save();
@@ -85,7 +88,7 @@ class TraineeController extends Controller
     			$schoolID = $request->school_idschool;
     		}
 
-    		if($request->ec_flag === "x"){
+    		if($request->ec_flag){
     			$ec = new EmergencyContacts;
     			$ec->fname = $request->ec_fname;
     			$ec->mname = $request->ec_mname;
