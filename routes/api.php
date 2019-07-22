@@ -69,6 +69,7 @@ Route::get('trainee', 'TraineeController@index');
 Route::get('trainee/{id}', 'TraineeController@show');
 Route::put('trainee/{id}', 'TraineeController@update');
 Route::delete('trainee/{id}', 'TraineeController@delete');
+Route::get('trainee_all', 'TraineeController@getTraineeData');
 
 
 

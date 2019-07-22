@@ -8,6 +8,7 @@ use App\School;
 use App\EmergencyContacts;
 use App\TraineeRegistrationForm;
 use Validator, Input, Redirect;
+use DB;
 
 class TraineeController extends Controller
 {
@@ -51,7 +52,7 @@ class TraineeController extends Controller
 			course_idcourse,
 			school_idschool
 			emergency_contact
-			if false{insert}else{use ids}
+			if true{insert}else{use ids}
     	*/
 
     	$v = Validator::make($request->all(), [
@@ -162,5 +163,19 @@ class TraineeController extends Controller
 			'school_idschool' => $schoolID,
 			'emergency_contact' => $ecID,
         ]);
+    }
+
+    public function getTraineeData(){
+    	$city = DB::table('trainee_registration_form')
+        ->join('schools', 'trainee_registration_form.school_idschool', '=', 'schools.id')
+        ->join('courses', 'trainee_registration_form.course_idcourse', '=', 'courses.id')
+        ->select('trainee_fname','trainee_mname','trainee_lname','courses.course_text','schools.school_name')
+        ->orderBy('trainee_registration_form.id','DESC')
+        ->get();
+        return response()->json([
+        	'success' => true,
+        	'data' => $city,
+        	'message' => 'Data extracted successfully.'
+        ], 200);
     }
 }
