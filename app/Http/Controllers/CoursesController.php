@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Courses;
 use Validator, Input, Redirect;
+use Exception;
 
 class CoursesController extends Controller
 {
@@ -67,17 +68,24 @@ class CoursesController extends Controller
     }
 
     public function delete(Request $request, $id){
-        if(!empty(Courses::find($id))){
-            Courses::findOrFail($id)->delete();
-            return response()->json([
-                'success' => true,
-                'message' => 'School has been deleted.'
-            ], 200);
-        }else{
+        try{
+            if(!empty(Courses::find($id))){
+                Courses::findOrFail($id)->delete();
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Course has been deleted successfully.'
+                ], 200);
+            }else{
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Record does not exist. Cannot delete.'
+                ], 404);
+            }
+        }catch(Exception $e){
             return response()->json([
                 'success' => false,
-                'message' => 'Record does not exist. Cannot delete.'
-            ], 404);
+                'message' => 'Cannot delete record. This occurs because other users are using this record.'
+            ],422);
         }
     }
 }

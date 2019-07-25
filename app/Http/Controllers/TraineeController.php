@@ -9,6 +9,7 @@ use App\EmergencyContacts;
 use App\TraineeRegistrationForm;
 use Validator, Input, Redirect;
 use DB;
+use Exception;
 
 class TraineeController extends Controller
 {
@@ -72,24 +73,26 @@ class TraineeController extends Controller
     		$ecID = 0;
 
     		if($request->c_flag){
+    			$courseID = $request->course_idcourse;
+    		}else{
     			$courses = new Courses;
     			$courses->course_text = $request->c_course_text;
     			$courses->save();
     			$courseID = $courses->id;
-    		}else{
-    			$courseID = $request->course_idcourse;
     		}
 
     		if($request->s_flag){
+    			$schoolID = $request->school_idschool;
+    		}else{	
     			$schools = new School;
     			$schools->school_name = $request->s_school_name;
     			$schools->save();
     			$schoolID = $schools->id;
-    		}else{
-    			$schoolID = $request->school_idschool;
     		}
 
     		if($request->ec_flag){
+    			$ecID = $request->emergency_contact;
+    		}else{
     			$ec = new EmergencyContacts;
     			$ec->fname = $request->ec_fname;
     			$ec->mname = $request->ec_mname;
@@ -98,15 +101,18 @@ class TraineeController extends Controller
     			$ec->address = $request->ec_address;
     			$ec->save();
     			$ecID = $ec->id;
-    		}else{
-    			$ecID = $request->emergency_contact;
     		}
 
     		$trainee = $this->create($request->all(), $courseID, $schoolID, $ecID);
+            $trainee->course_text = DB::table('Courses')->where('id', '=', $courseID)->select('course_text')->get();
+            $trainee->school_name = DB::table('Schools')->where('id', '=', $schoolID)->select('school_name')->get();
+            $trainee->e_c = DB::table('emergency_contact')->where('id','=', $ecID)->select('fname as FirstName','mname as MiddleName','lname as LastName')->get();
+
     		return response()->json([
     			'success' => true,
     			'data' => $trainee,
     			'message' => 'Trainee data has been saved successfully!',
+
     		], 200);
     	}
     }
@@ -134,17 +140,24 @@ class TraineeController extends Controller
     }
 
     public function delete(Request $request, $id){
-        if(!empty(TraineeRegistrationForm::find($id))){
-            TraineeRegistrationForm::findOrFail($id)->delete();
-            return response()->json([
-                'success' => true,
-                'message' => 'Trainee has been deleted.'
-            ], 200);
-        }else{
+        try{
+            if(!empty(TraineeRegistrationForm::find($id))){
+                TraineeRegistrationForm::findOrFail($id)->delete();
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Trainee has been deleted.'
+                ], 200);
+            }else{
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Record does not exist. Cannot delete.'
+                ], 404);
+            }
+        }catch(Exception $e){
             return response()->json([
                 'success' => false,
-                'message' => 'Record does not exist. Cannot delete.'
-            ], 404);
+                'message' => 'There was an error with your request.'
+            ],422);
         }
     }
 
@@ -166,16 +179,24 @@ class TraineeController extends Controller
     }
 
     public function getTraineeData(){
-    	$city = DB::table('trainee_registration_form')
-        ->join('schools', 'trainee_registration_form.school_idschool', '=', 'schools.id')
-        ->join('courses', 'trainee_registration_form.course_idcourse', '=', 'courses.id')
-        ->select('trainee_fname','trainee_mname','trainee_lname','courses.course_text','schools.school_name')
-        ->orderBy('trainee_registration_form.id','DESC')
-        ->get();
-        return response()->json([
-        	'success' => true,
-        	'data' => $city,
-        	'message' => 'Data extracted successfully.'
-        ], 200);
+    	try{
+            $trainee = DB::table('trainee_registration_form')
+            ->join('schools', 'trainee_registration_form.school_idschool', '=', 'schools.id')
+            ->join('courses', 'trainee_registration_form.course_idcourse', '=', 'courses.id')
+            ->join('emergency_contact', 'trainee_registration_form.emergency_contact', '=', 'emergency_contact.id')
+            ->select('trainee_registration_form.id as TraineeID','courses.id as CourseID','schools.id as SchoolID','emergency_contact.id as EID','trainee_fname','trainee_mname','trainee_lname','trainee_bdate','trainee_home_add','trainee_sex','trainee_contact_no','required_no_of_hrs','purpose_of_stay','date_submitted','courses.course_text','schools.school_name','emergency_contact.fname as ECFName','emergency_contact.mname as ECMName','emergency_contact.lname as ECLName','emergency_contact.contact_number as ECContactNumber','emergency_contact.address as ECAddress')
+            ->orderBy('trainee_registration_form.id','DESC')
+            ->get();
+            return response()->json([
+                'success' => true,
+                'data' => $trainee,
+                'message' => 'Data extracted successfully.'
+            ], 200);
+        }catch(Exception $e){
+            return response()->json([
+                'success' => false,
+                'message' => 'Cannot delete record. This occurs because other users are using this record.'
+            ],422);
+        }
     }
 }
