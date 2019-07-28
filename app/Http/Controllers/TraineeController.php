@@ -118,7 +118,7 @@ class TraineeController extends Controller
     }
 
     public function update(Request $request, $id){
-    	$trainee = TraineeRegistrationForm::findOrFail($id);
+    	$trainee = TraineeRegistrationForm::findOrFail($id)->first();
         $v = Validator::make($request->all(), [
     		'trainee_fname' => 'unique_with:trainee_registration_form, trainee_mname, trainee_lname',
     	]);
@@ -129,12 +129,65 @@ class TraineeController extends Controller
                 'message' => $v->errors(),
             ],422);
         }else{
-            $trainee->update($request->all());
+            
+
+            if($request->c_flag){
+                $trainee->course_idcourse = $request->course_idcourse;
+            }else{
+                $courses = Courses::create([
+                    'course_text' => $request->c_course_text,
+                ]);
+                // $courses->course_text = $request->c_course_text;
+                // $courses->save();
+                $trainee->course_idcourse = $courses->id;
+            }
+
+            // if($request->s_flag){
+            //     $schoolID = $request->school_idschool;
+            // }else{  
+            //     $schools = new School;
+            //     $schools->school_name = $request->s_school_name;
+            //     $schools->save();
+            //     $schoolID = $schools->id;
+            // }
+
+            // if($request->ec_flag){
+            //     $ecID = $request->emergency_contact;
+            // }else{
+            //     $ec = new EmergencyContacts;
+            //     $ec->fname = $request->ec_fname;
+            //     $ec->mname = $request->ec_mname;
+            //     $ec->lname = $request->ec_lname;
+            //     $ec->contact_number = $request->ec_contact_number;
+            //     $ec->address = $request->ec_address;
+            //     $ec->save();
+            //     $ecID = $ec->id;
+            // }
+
+            // $trainee->trainee_fname = $request->trainee_fname;
+            // $trainee->trainee_mname = $request->trainee_mname;
+            // $trainee->trainee_lname = $request->trainee_lname;
+            // $trainee->trainee_bdate = $request->trainee_bdate;
+            // $trainee->trainee_home_add = $request->trainee_home_add;
+            // $trainee->trainee_sex = $request->trainee_sex;
+            // $trainee->trainee_contact_no = $request->trainee_contact_no;
+            // $trainee->required_no_of_hrs = $request->required_no_of_hrs;
+            // $trainee->purpose_of_stay = $request->purpose_of_stay;
+            // $trainee->course_idcourse = $courseID;
+            // $trainee->school_idschool = $schoolID;
+            // $trainee->emergency_contact = $ecID;
+            // $trainee->save();
+            
+            // return response()->json([
+            //     'success' => true,
+            //     'data' => $trainee,
+            //     'message' => 'Trainee data has been updated successfully!',
+            // ], 200);
             return response()->json([
-                'success' => true,
-                'data' => $trainee,
-                'message' => 'Trainee data updated sucessfully'
-            ], 200);
+                'flag' => $request->c_flag,
+                'id' => $trainee->course_idcourse,
+                'text' => $request->c_course_text,
+            ],200);
         }
 
     }
@@ -161,6 +214,8 @@ class TraineeController extends Controller
         }
     }
 
+
+
     protected function create(array $data, $courseID, $schoolID, $ecID){
         return TraineeRegistrationForm::create([
             'trainee_fname' => $data['trainee_fname'],
@@ -176,6 +231,22 @@ class TraineeController extends Controller
 			'school_idschool' => $schoolID,
 			'emergency_contact' => $ecID,
         ]);
+    }
+
+    protected function update_trainee(array $data, $courseID, $schoolID, $ecID){
+        $trainee->trainee_fname = $data['trainee_fname'];
+        $trainee->trainee_mname = $data['trainee_mname'];
+        $trainee->trainee_lname = $data['trainee_lname'];
+        $trainee->trainee_bdate = $data['trainee_bdate'];
+        $trainee->trainee_home_add = $data['trainee_home_add'];
+        $trainee->trainee_sex = $data['trainee_sex'];
+        $trainee->trainee_contact_no = $data['trainee_contact_no'];
+        $trainee->required_no_of_hrs = $data['required_no_of_hrs'];
+        $trainee->purpose_of_stay = $data['purpose_of_stay'];
+        $trainee->course_idcourse = $courseID;
+        $trainee->school_idschool = $schoolID;
+        $trainee->emergency_contact = $ecID;
+        $trainee->update();
     }
 
     public function getTraineeData(){
