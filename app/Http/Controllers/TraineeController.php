@@ -270,4 +270,27 @@ class TraineeController extends Controller
             ],422);
         }
     }
+
+    public function getTraineeDataById($id){
+        try{
+            $trainee = DB::table('trainee_registration_form')
+            ->join('schools', 'trainee_registration_form.school_idschool', '=', 'schools.id')
+            ->join('courses', 'trainee_registration_form.course_idcourse', '=', 'courses.id')
+            ->join('emergency_contact', 'trainee_registration_form.emergency_contact', '=', 'emergency_contact.id')
+            ->select('trainee_registration_form.id as TraineeID','courses.id as CourseID','schools.id as SchoolID','emergency_contact.id as EID','trainee_fname','trainee_mname','trainee_lname','trainee_bdate','trainee_home_add','trainee_sex','trainee_contact_no','required_no_of_hrs','purpose_of_stay','date_submitted','courses.course_text','schools.school_name','emergency_contact.fname as ECFName','emergency_contact.mname as ECMName','emergency_contact.lname as ECLName','emergency_contact.contact_number as ECContactNumber','emergency_contact.address as ECAddress')
+            ->where('trainee_registration_form.id','=', $id)
+            ->orderBy('trainee_registration_form.id','DESC')
+            ->get();
+            return response()->json([
+                'success' => true,
+                'data' => $trainee,
+                'message' => 'Data extracted successfully.'
+            ], 200);
+        }catch(Exception $e){
+            return response()->json([
+                'success' => false,
+                'message' => 'Cannot delete record. This occurs because other users are using this record.'
+            ],422);
+        }
+    }
 }

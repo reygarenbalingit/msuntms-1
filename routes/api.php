@@ -66,7 +66,7 @@ Route::delete('ec/{id}', 'EmergencyContactsController@delete');
 
 Route::post('trainee', 'TraineeController@store');
 Route::get('trainee', 'TraineeController@index');
-Route::get('trainee/{id}', 'TraineeController@show');
+Route::get('trainee/{id}', 'TraineeController@getTraineeDataById');
 Route::put('trainee/{id}', 'TraineeController@update');
 Route::delete('trainee/{id}', 'TraineeController@delete');
 Route::get('trainee_all', 'TraineeController@getTraineeData');
