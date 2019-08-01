@@ -118,9 +118,9 @@ class TraineeController extends Controller
     }
 
     public function update(Request $request, $id){
-    	$trainee = TraineeRegistrationForm::findOrFail($id)->first();
+    	$trainee = TraineeRegistrationForm::findOrFail($id);
         $v = Validator::make($request->all(), [
-    		'trainee_fname' => 'unique_with:trainee_registration_form, trainee_mname, trainee_lname',
+    		'trainee_fname' => 'unique_with:trainee_registration_form, trainee_mname, trainee_lname,'. $id,
     	]);
 
         if($v->fails()){
@@ -129,65 +129,45 @@ class TraineeController extends Controller
                 'message' => $v->errors(),
             ],422);
         }else{
-            
+            $trainee->trainee_fname = $request->trainee_fname;
+            $trainee->trainee_mname = $request->trainee_mname;
+            $trainee->trainee_lname = $request->trainee_lname;
+            $trainee->trainee_bdate = $request->trainee_bdate;
+            $trainee->trainee_home_add = $request->trainee_home_add;
+            $trainee->trainee_sex = $request->trainee_sex;
+            $trainee->trainee_contact_no = $request->trainee_contact_no;
+            $trainee->required_no_of_hrs = $request->required_no_of_hrs;
+            $trainee->purpose_of_stay = $request->purpose_of_stay;
 
-            if($request->c_flag){
+            if($request->c_flag === 'true'){
                 $trainee->course_idcourse = $request->course_idcourse;
             }else{
-                $courses = Courses::create([
-                    'course_text' => $request->c_course_text,
-                ]);
-                // $courses->course_text = $request->c_course_text;
-                // $courses->save();
+                $courses = Courses::create($request->all());
                 $trainee->course_idcourse = $courses->id;
             }
 
-            // if($request->s_flag){
-            //     $schoolID = $request->school_idschool;
-            // }else{  
-            //     $schools = new School;
-            //     $schools->school_name = $request->s_school_name;
-            //     $schools->save();
-            //     $schoolID = $schools->id;
-            // }
+            if($request->s_flag === 'true'){
+                $trainee->school_idschool = $request->school_idschool;
+            }else{  
+                $schools = School::create($request->all());
+                $trainee->school_idschool = $schools->id;
+            }
 
-            // if($request->ec_flag){
-            //     $ecID = $request->emergency_contact;
-            // }else{
-            //     $ec = new EmergencyContacts;
-            //     $ec->fname = $request->ec_fname;
-            //     $ec->mname = $request->ec_mname;
-            //     $ec->lname = $request->ec_lname;
-            //     $ec->contact_number = $request->ec_contact_number;
-            //     $ec->address = $request->ec_address;
-            //     $ec->save();
-            //     $ecID = $ec->id;
-            // }
+            if($request->ec_flag === 'true'){
+                $trainee->emergency_contact = $request->emergency_contact;
+            }else{
+                $ec = EmergencyContacts::create($request->all());
+                $trainee->emergency_contact = $ec->id;
+            }
 
-            // $trainee->trainee_fname = $request->trainee_fname;
-            // $trainee->trainee_mname = $request->trainee_mname;
-            // $trainee->trainee_lname = $request->trainee_lname;
-            // $trainee->trainee_bdate = $request->trainee_bdate;
-            // $trainee->trainee_home_add = $request->trainee_home_add;
-            // $trainee->trainee_sex = $request->trainee_sex;
-            // $trainee->trainee_contact_no = $request->trainee_contact_no;
-            // $trainee->required_no_of_hrs = $request->required_no_of_hrs;
-            // $trainee->purpose_of_stay = $request->purpose_of_stay;
-            // $trainee->course_idcourse = $courseID;
-            // $trainee->school_idschool = $schoolID;
-            // $trainee->emergency_contact = $ecID;
-            // $trainee->save();
+            $trainee->save();
             
-            // return response()->json([
-            //     'success' => true,
-            //     'data' => $trainee,
-            //     'message' => 'Trainee data has been updated successfully!',
-            // ], 200);
             return response()->json([
-                'flag' => $request->c_flag,
-                'id' => $trainee->course_idcourse,
-                'text' => $request->c_course_text,
-            ],200);
+                'success' => true,
+                'data' => $trainee,
+                'message' => 'Trainee data has been updated successfully!',
+            ], 200);
+            
         }
 
     }
