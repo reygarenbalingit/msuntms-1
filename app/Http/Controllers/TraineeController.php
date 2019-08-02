@@ -14,12 +14,22 @@ use Exception;
 class TraineeController extends Controller
 {
     public function index(){
-    	return TraineeRegistrationForm::all();
+    	$trainee = TraineeRegistrationForm::orderBy('id', 'DESC')->get();
+        return response()->json([
+            'success' => true,
+            'data' => $trainee,
+            'message' => 'Trainee data extracted successfully.',
+        ],200);
     }
 
     public function show($id){
     	if(!empty(TraineeRegistrationForm::find($id))){
-    		return TraineeRegistrationForm::find($id);
+    		$trainee = TraineeRegistrationForm::find($id);
+            return response()->json([
+                'success' => true,
+                'data' => $trainee,
+                'message' => 'Trainee data extracted successfully.'
+            ],200);
     	}else{
     		return response()->json([
                 'success' => false,

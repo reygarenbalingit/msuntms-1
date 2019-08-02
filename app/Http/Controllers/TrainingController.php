@@ -4,19 +4,31 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Training;
+use Illuminate\Validation\Rule;
 use Validator, Input, Redirect;
 use Tymon\JWTAuth\JWTAuth;
 
 class TrainingController extends Controller
 {
     public function index(){
-    	return Training::all();
+    	//$trainings_all = Training::all();
+        $trainings_all = Training::orderBy('id', 'DESC')->get();
+        return response()->json([
+            'success' => true,
+            'data' => $trainings_all,
+            'message' => 'Trainings has been sucessfully extracted.'
+        ],200);
     	//return auth()->user()->id;
     }
 
     public function show($id){
     	if(!empty(Training::find($id))){
-    		return Training::find($id);
+    		$trainings_show = Training::find($id);
+            return response()->json([
+                'success' => true,
+                'data' => $trainings_show,
+                'message' => 'Training data extracted successfully.'
+            ],200);
     	}else{
     		return response()->json([
                 'success' => false,
@@ -59,7 +71,10 @@ class TrainingController extends Controller
     public function update(Request $request, $id){
     	$training = Training::findOrFail($id);
         $v = Validator::make($request->all(), [
-            'title_of_training' => 'required|unique:training',
+            //'title_of_training' => 'required|unique:training,'.$id.'',
+            'title_of_training' => ['required',
+            Rule::unique('training')->ignore($id),
+            ]
         ]);
 
         if($v->fails()){

@@ -10,12 +10,22 @@ use Exception;
 class SchoolController extends Controller
 {
     public function index(){
-    	return School::all();
+    	$school = School::orderBy('id', 'DESC')->get();
+        return response()->json([
+            'success' => true,
+            'data' => $school,
+            'message' => 'Schools extracted successfully'
+        ],200);
     }
 
     public function show($id){
     	if(!empty(School::find($id))){
-    		return School::find($id);
+    		$school = School::find($id);
+            return response()->json([
+                'success' => true,
+                'data' => $school,
+                'message' => 'School extracted successfully'
+            ],200);
     	}else{
     		return response()->json([
     			'message' => 'Record not found'

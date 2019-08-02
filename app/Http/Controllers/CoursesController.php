@@ -10,12 +10,22 @@ use Exception;
 class CoursesController extends Controller
 {
     public function index(){
-    	return Courses::all();
+    	$c = Courses::orderBy('id', 'DESC')->get();
+        return response()->json([
+            'success' => true,
+            'data' => $c,
+            'message' => 'Courses extracted successfully'
+        ],200);
     }
 
     public function show($id){
     	if(!empty(Courses::find($id))){
-    		return Courses::find($id);
+    		$c = Courses::find($id);
+            return response()->json([
+                'success' => true,
+                'data' => $c,
+                'message' => 'Course extracted successfully'
+            ],200);
     	}else{
     		return response()->json([
                 'success' => false,

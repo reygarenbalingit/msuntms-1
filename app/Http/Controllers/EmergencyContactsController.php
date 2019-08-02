@@ -11,12 +11,22 @@ use Exception;
 class EmergencyContactsController extends Controller
 {
     public function index(){
-    	return EmergencyContacts::all();
+    	$ec = EmergencyContacts::orderBy('id', 'DESC')->get();
+        return response()->json([
+            'success' => true,
+            'data' => $ec,
+            'message' => 'Emergency contacts extracted successfully'
+        ],200);
     }
 
     public function show($id){
     	if(!empty(EmergencyContacts::find($id))){
-    		return EmergencyContacts::find($id);
+    		$ec =  EmergencyContacts::find($id);
+            return response()->json([
+                'success' => true,
+                'data' => $ec,
+                'message' => 'Emergency contact extracted successfully'
+            ],200);
     	}else{
     		return response()->json([
     			'message' => 'Record not found'
