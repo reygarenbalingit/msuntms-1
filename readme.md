@@ -39,14 +39,18 @@
 By navigating to the source file via CLI, you can use the 
 
     php artisan serve 
-    or
+    
+or
+    
     php artisan serve --host <IP address> --port <port_number>
     
+### Database Schema Model
+See ERD here (https://prnt.sc/oohxr4)
 ### API Routes
 
     Route::group(['prefix' => '/auth', ['middleware' => 'throttle:20,5']], function(){
-	Route::post('/register', 'api\Auth\RegisterController@register');
-	Route::post('/login', 'api\Auth\LoginController@login');
+    Route::post('/register', 'api\Auth\RegisterController@register');
+    Route::post('/login', 'api\Auth\LoginController@login');
     });
 
     Route::group(['middleware' => 'jwt.auth'], function(){
