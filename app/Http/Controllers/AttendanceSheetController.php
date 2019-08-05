@@ -58,6 +58,27 @@ class AttendanceSheetController extends Controller
     	}
     }
 
+    public function update(Request $request, $id){
+    	$as = AttendanceSheet::findOrFail($id);
+        $v = Validator::make($request->all(), [
+            'date_from' => 'required|unique_with:attendance_sheet, date_to,'. $id,
+        ]);
+
+        if($v->fails()){
+            return response()->json([
+                'success' => false, 
+                'message' => 'Attendance range already exist.'
+            ],422);
+        }else{
+            $as->update($request->all());
+            return response()->json([
+                'success' => true,
+                'data' => $as,
+                'message' => 'Attendance sheet updated sucessfully'
+            ], 200);
+        }
+    }
+
     public function delete(Request $request, $id){
         try{
             if(!empty(AttendanceSheet::find($id))){

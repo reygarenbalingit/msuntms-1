@@ -75,6 +75,7 @@ Route::post('attendance', 'AttendanceSheetController@store');
 Route::get('attendance','AttendanceSheetController@index');
 Route::get('attendance/{id}','AttendanceSheetController@show');
 Route::delete('attendance/{id}','AttendanceSheetController@delete');
+Route::post('attendance/{id}','AttendanceSheetController@update');
 
 
 Route::group(['middleware' => 'jwt.auth'], function(){
