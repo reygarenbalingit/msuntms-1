@@ -77,6 +77,8 @@ Route::get('attendance/{id}','AttendanceSheetController@show');
 Route::delete('attendance/{id}','AttendanceSheetController@delete');
 Route::post('attendance/{id}','AttendanceSheetController@update');
 
+Route::post('attend_add','AttendanceDetailsController@store');
+
 
 Route::group(['middleware' => 'jwt.auth'], function(){
 	Route::post('trainings', 'TrainingController@store');
