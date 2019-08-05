@@ -71,7 +71,6 @@ class TrainingController extends Controller
     public function update(Request $request, $id){
     	$training = Training::findOrFail($id);
         $v = Validator::make($request->all(), [
-            //'title_of_training' => 'required|unique:training,'.$id.'',
             'title_of_training' => ['required',
             Rule::unique('training')->ignore($id),
             ]

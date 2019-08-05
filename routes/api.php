@@ -71,6 +71,10 @@ Route::post('trainee/{id}', 'TraineeController@update');
 Route::delete('trainee/{id}', 'TraineeController@delete');
 Route::get('trainee_all', 'TraineeController@getTraineeData');
 
+Route::post('attendance', 'AttendanceSheetController@store');
+Route::get('attendance','AttendanceSheetController@index');
+Route::get('attendance/{id}','AttendanceSheetController@show');
+Route::delete('attendance/{id}','AttendanceSheetController@delete');
 
 
 Route::group(['middleware' => 'jwt.auth'], function(){

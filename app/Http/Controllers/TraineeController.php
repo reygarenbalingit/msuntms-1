@@ -122,7 +122,6 @@ class TraineeController extends Controller
     			'success' => true,
     			'data' => $trainee,
     			'message' => 'Trainee data has been saved successfully!',
-
     		], 200);
     	}
     }
