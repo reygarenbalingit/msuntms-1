@@ -8,5 +8,5 @@ class AttendanceSheet extends Model
 {
     public $primaryKey = 'id';
 	protected $table = "attendance_sheet";
-	protected $fillable = ['id','date_from', 'date_to', 'pte_id', 'updated_at', 'created_at'];
+	protected $fillable = ['id','attendance_title','date_from', 'date_to', 'pte_id', 'updated_at', 'created_at'];
 }

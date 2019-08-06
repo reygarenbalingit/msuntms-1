@@ -58,7 +58,7 @@ class AttendanceDetailsController extends Controller
     public function attendance_list($id){
         try{
             $list = DB::select('
-                select trainee_mname, trainee_lname,trainee_fname, title_of_training, location,
+                select trainee_mname, trainee_lname,trainee_fname, title_of_training, trainer, location,
                 training.date_from as training_date_from, training.date_to as 
                 training_date_to,attendance_sheet.date_from as training_attendance_date_from
                 , attendance_sheet.date_to as training_attendance_date_to,attendance_details.date as 

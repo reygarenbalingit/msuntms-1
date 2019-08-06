@@ -62,6 +62,7 @@ class TrainingController extends Controller
     	return Training::create([
     		'title_of_training' => $data['title_of_training'],
             'location' => $data['location'],
+            'trainer' => $data['trainer'],
             'date_from' => $data['date_from'],
 			'date_to' => $data['date_to'],
 			'user_id' => auth()->user()->id,
