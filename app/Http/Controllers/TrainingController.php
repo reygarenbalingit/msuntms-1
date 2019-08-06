@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Training;
+use App\EvaluationQuestions;
 use Illuminate\Validation\Rule;
 use Validator, Input, Redirect;
 use Tymon\JWTAuth\JWTAuth;
@@ -55,7 +56,52 @@ class TrainingController extends Controller
                 'data' => $training,
                 'message' => 'Training created sucessfully.'
             ], 200);
-    	}	
+    	}
+
+        //insert questions here
+    }
+
+    protected function storeQuestions($id){
+        EvaluationQuestions::create([
+            'question_text' => '1. Ang mga gihisgutan nga mga hilisgutan adunay kalabutan kanako. (The topics covered were relevant to me.)',
+            'participant_training-evaluation_id' => $id,
+        ]);
+        EvaluationQuestions::create([
+            'question_text' => '2. Kini nga training experience mapuslan sa akong trabaho. (This training experience will be useful in my work.)',
+            'participant_training-evaluation_id' => $id,
+        ]);
+        EvaluationQuestions::create([
+            'question_text' => '3. Ang trainer adunay kahibalo mahitungod sa mga hilisgutan sa training. (The trainer was knowledgeable about the training topics.)',
+            'participant_training-evaluation_id' => $id,
+        ]);
+        EvaluationQuestions::create([
+            'question_text' => '4. Ang trainer adunay kahibalo mahitungod sa mga hilisgutan sa training. (The trainer was knowledgeable about the training topics.)',
+            'participant_training-evaluation_id' => $id,
+        ]);
+        EvaluationQuestions::create([
+            'question_text' => '5. Ang mga tumong sa training kay natuman. (The training objectives were met.)',
+            'participant_training-evaluation_id' => $id,
+        ]);
+        EvaluationQuestions::create([
+            'question_text' => '6. Ang mga panahon nga gigahin alang sa training kay igo na. (The time alloted for the training was sufficient.)',
+            'participant_training-evaluation_id' => $id,
+        ]);
+        EvaluationQuestions::create([
+            'question_text' => '7. Ang meeting room ug mga pasilidad igo ug komportable. (The meeting room and facilities were adequate and comfortable.)',
+            'participant_training-evaluation_id' => $id,
+        ]);
+        EvaluationQuestions::create([
+            'question_text' => '8. Ang mga estilo ug pama-agi sa mga lecturer sa pagtudlo kay maayo ba. (The teaching styles and directions of the lecturers are good.)',
+            'participant_training-evaluation_id' => $id,
+        ]);
+        EvaluationQuestions::create([
+            'question_text' => '9. Nalingaw ka ba sa training nga gihatag kanimo (Did you enjoy the training that was given to you.)',
+            'participant_training-evaluation_id' => $id,
+        ]);
+        EvaluationQuestions::create([
+            'question_text' => '10. Natuman ba ang imong expectation. (Did your expectation was fulfilled.)',
+            'participant_training-evaluation_id' => $id,
+        ]);
     }
 
     protected function createTraining(array $data){
