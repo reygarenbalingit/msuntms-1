@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\School;
 use Validator, Input, Redirect;
+use Illuminate\Validation\Rule;
 use Exception;
 
 class SchoolController extends Controller
@@ -58,7 +59,9 @@ class SchoolController extends Controller
     	//test in postman using parameters URL
     	$school = School::findOrFail($id);
         $v = Validator::make($request->all(), [
-            'school_name' => 'required|unique:schools',
+            'school_name' => ['required',
+            Rule::unique('schools')->ignore($id),
+            ]
         ]);
 
         if($v->fails()){

@@ -67,7 +67,7 @@ class TraineeController extends Controller
     	*/
 
     	$v = Validator::make($request->all(), [
-    		'trainee_fname' => 'required|unique_with:trainee_registration_form, trainee_mname, trainee_lname',
+    		'trainee_fname' => 'required|unique_with:trainee, trainee_mname, trainee_lname',
     		'trainee_mname' => 'required',
     		'trainee_lname' => 'required',
     	]);
@@ -129,7 +129,7 @@ class TraineeController extends Controller
     public function update(Request $request, $id){
     	$trainee = TraineeRegistrationForm::findOrFail($id);
         $v = Validator::make($request->all(), [
-    		'trainee_fname' => 'unique_with:trainee_registration_form, trainee_mname, trainee_lname,'. $id,
+    		'trainee_fname' => 'unique_with:trainee, trainee_mname, trainee_lname,'. $id,
     	]);
 
         if($v->fails()){
@@ -240,12 +240,12 @@ class TraineeController extends Controller
 
     public function getTraineeData(){
     	try{
-            $trainee = DB::table('trainee_registration_form')
-            ->join('schools', 'trainee_registration_form.school_idschool', '=', 'schools.id')
-            ->join('courses', 'trainee_registration_form.course_idcourse', '=', 'courses.id')
-            ->join('emergency_contact', 'trainee_registration_form.emergency_contact', '=', 'emergency_contact.id')
-            ->select('trainee_registration_form.id as TraineeID','courses.id as CourseID','schools.id as SchoolID','emergency_contact.id as EID','trainee_fname','trainee_mname','trainee_lname','trainee_bdate','trainee_home_add','trainee_sex','trainee_contact_no','required_no_of_hrs','purpose_of_stay','date_submitted','courses.course_text','schools.school_name','emergency_contact.fname as ECFName','emergency_contact.mname as ECMName','emergency_contact.lname as ECLName','emergency_contact.contact_number as ECContactNumber','emergency_contact.address as ECAddress')
-            ->orderBy('trainee_registration_form.id','DESC')
+            $trainee = DB::table('trainee')
+            ->join('schools', 'trainee.school_idschool', '=', 'schools.id')
+            ->join('courses', 'trainee.course_idcourse', '=', 'courses.id')
+            ->join('emergency_contact', 'trainee.emergency_contact', '=', 'emergency_contact.id')
+            ->select('trainee.id as TraineeID','courses.id as CourseID','schools.id as SchoolID','emergency_contact.id as EID','trainee_fname','trainee_mname','trainee_lname','trainee_bdate','trainee_home_add','trainee_sex','trainee_contact_no','required_no_of_hrs','purpose_of_stay','date_submitted','courses.course_text','schools.school_name','emergency_contact.fname as ECFName','emergency_contact.mname as ECMName','emergency_contact.lname as ECLName','emergency_contact.contact_number as ECContactNumber','emergency_contact.address as ECAddress')
+            ->orderBy('trainee.id','DESC')
             ->get();
             return response()->json([
                 'success' => true,
@@ -262,13 +262,13 @@ class TraineeController extends Controller
 
     public function getTraineeDataById($id){
         try{
-            $trainee = DB::table('trainee_registration_form')
-            ->join('schools', 'trainee_registration_form.school_idschool', '=', 'schools.id')
-            ->join('courses', 'trainee_registration_form.course_idcourse', '=', 'courses.id')
-            ->join('emergency_contact', 'trainee_registration_form.emergency_contact', '=', 'emergency_contact.id')
-            ->select('trainee_registration_form.id as TraineeID','courses.id as CourseID','schools.id as SchoolID','emergency_contact.id as EID','trainee_fname','trainee_mname','trainee_lname','trainee_bdate','trainee_home_add','trainee_sex','trainee_contact_no','required_no_of_hrs','purpose_of_stay','date_submitted','courses.course_text','schools.school_name','emergency_contact.fname as ECFName','emergency_contact.mname as ECMName','emergency_contact.lname as ECLName','emergency_contact.contact_number as ECContactNumber','emergency_contact.address as ECAddress')
-            ->where('trainee_registration_form.id','=', $id)
-            ->orderBy('trainee_registration_form.id','DESC')
+            $trainee = DB::table('trainee')
+            ->join('schools', 'trainee.school_idschool', '=', 'schools.id')
+            ->join('courses', 'trainee.course_idcourse', '=', 'courses.id')
+            ->join('emergency_contact', 'trainee.emergency_contact', '=', 'emergency_contact.id')
+            ->select('trainee.id as TraineeID','courses.id as CourseID','schools.id as SchoolID','emergency_contact.id as EID','trainee_fname','trainee_mname','trainee_lname','trainee_bdate','trainee_home_add','trainee_sex','trainee_contact_no','required_no_of_hrs','purpose_of_stay','date_submitted','courses.course_text','schools.school_name','emergency_contact.fname as ECFName','emergency_contact.mname as ECMName','emergency_contact.lname as ECLName','emergency_contact.contact_number as ECContactNumber','emergency_contact.address as ECAddress')
+            ->where('trainee.id','=', $id)
+            ->orderBy('trainee.id','DESC')
             ->get();
             return response()->json([
                 'success' => true,

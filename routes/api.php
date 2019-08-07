@@ -48,20 +48,20 @@ Route::group(['middleware' => 'jwt.auth'], function(){
 Route::get('school', 'SchoolController@index');
 Route::get('school/{id}', 'SchoolController@show');
 Route::post('school', 'SchoolController@store');
-Route::put('school/{id}', 'SchoolController@update');
+Route::post('school/{id}', 'SchoolController@update');
 Route::delete('school/{id}', 'SchoolController@delete');
 
 
 Route::get('course', 'CoursesController@index');
 Route::get('course/{id}', 'CoursesController@show');
 Route::post('course', 'CoursesController@store');
-Route::put('course/{id}', 'CoursesController@update');
+Route::post('course/{id}', 'CoursesController@update');
 Route::delete('course/{id}', 'CoursesController@delete');
 
 Route::get('ec', 'EmergencyContactsController@index');
 Route::get('ec/{id}', 'EmergencyContactsController@show');
 Route::post('ec', 'EmergencyContactsController@store');
-Route::put('ec/{id}', 'EmergencyContactsController@update');
+Route::post('ec/{id}', 'EmergencyContactsController@update');
 Route::delete('ec/{id}', 'EmergencyContactsController@delete');
 
 Route::post('trainee', 'TraineeController@store');

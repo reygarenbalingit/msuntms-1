@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Courses;
 use Validator, Input, Redirect;
+use Illuminate\Validation\Rule;
 use Exception;
 
 class CoursesController extends Controller
@@ -58,7 +59,9 @@ class CoursesController extends Controller
     public function update(Request $request, $id){
     	$courses = Courses::findOrFail($id);
         $v = Validator::make($request->all(), [
-            'course_text' => 'required|unique:courses',
+            'course_text' => ['required',
+            Rule::unique('courses')->ignore($id),
+            ]
         ]);
 
         if($v->fails()){

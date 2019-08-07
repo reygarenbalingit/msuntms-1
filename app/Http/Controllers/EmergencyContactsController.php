@@ -57,7 +57,7 @@ class EmergencyContactsController extends Controller
     public function update(Request $request, $id){
     	$ec = EmergencyContacts::findOrFail($id);
         $v = Validator::make($request->all(), [
-            'fname' => 'required|unique_with:emergency_contact, mname, lname',
+            'fname' => 'required|unique_with:emergency_contact, mname, lname,'. $id,
         ]);
         if($v->fails()){
             return response()->json([
