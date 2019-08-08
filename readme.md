@@ -1,3 +1,6 @@
+### A Training Management System for MSUN Research and Extension
+
+
 ### Prerequisites:
 
 1. XAMPP must be installed. Get it here (https://www.apachefriends.org/)
