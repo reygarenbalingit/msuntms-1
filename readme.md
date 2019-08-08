@@ -1,6 +1,9 @@
+<<<<<<< HEAD
 ### A Training Management System for MSUN Research and Extension
 
 
+=======
+>>>>>>> 498a9e1149f605ef75ed857f7c0a57d544b2587b
 ### Prerequisites:
 
 1. XAMPP must be installed. Get it here (https://www.apachefriends.org/)
