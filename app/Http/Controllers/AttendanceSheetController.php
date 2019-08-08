@@ -104,8 +104,8 @@ class AttendanceSheetController extends Controller
     public function getEventByTraining(Request $request, $id){
         try{
             $list = DB::select('
-            select attendance_sheet.id as EventID, attendance_sheet.attendance_title as Event_title,attendance_sheet.date_from as Event_from,
-            attendance_sheet.date_to as Event_to
+            select attendance_sheet.id as id, attendance_sheet.attendance_title as title,attendance_sheet.date_from as start,
+            attendance_sheet.date_to as end
             from attendance_sheet, training
             where attendance_sheet.pte_id = training.id AND
             training.id = '.$id.';
