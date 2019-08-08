@@ -1,9 +1,5 @@
-<<<<<<< HEAD
 ### A Training Management System for MSUN Research and Extension
 
-
-=======
->>>>>>> 498a9e1149f605ef75ed857f7c0a57d544b2587b
 ### Prerequisites:
 
 1. XAMPP must be installed. Get it here (https://www.apachefriends.org/)
@@ -25,7 +21,16 @@
     
     This command will install all the needed dependencies of the Laravel application to be used.
 3. Make sure to create the database and named "msuntms".
-4. Edit the .env file of the application and supply all the needed information on these fields:
+
+4. Run the command below to generate the application key. 
+
+        php artisan key:generate 
+
+5. Run the command below to generate the JWT keys for authentication.
+
+        php artisan jwt:secret
+
+6. Edit the .env file of the application and supply all the needed information on these fields:
 
         APP_NAME=Laravel
         APP_ENV=local
