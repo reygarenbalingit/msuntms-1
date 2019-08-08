@@ -55,7 +55,8 @@ or
     php artisan serve --host <IP address> --port <port_number>
     
 ### Database Schema Model
-See ERD here (https://prnt.sc/oohxr4)
+See ERD here (https://prnt.sc/opwvds)
+
 ### API Routes
 
     Route::group(['prefix' => '/auth', ['middleware' => 'throttle:20,5']], function(){
