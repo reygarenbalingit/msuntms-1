@@ -63,8 +63,8 @@ class AttendanceDetailsController extends Controller
                 training_date_to,attendance_sheet.date_from as training_attendance_date_from
                 , attendance_sheet.date_to as training_attendance_date_to,attendance_details.date as 
                 attend_logged_date
-                from trainee_registration_form, attendance_details, training, attendance_sheet
-                where attendance_details.trainee_Id = trainee_registration_form.id AND
+                from trainee, attendance_details, training, attendance_sheet
+                where attendance_details.trainee_Id = trainee.id AND
                 attendance_details.attend_id = attendance_sheet.id AND
                 attendance_sheet.pte_id = training.id AND
                 attendance_sheet.id = '.$id.'
