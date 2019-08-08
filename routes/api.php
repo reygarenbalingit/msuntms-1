@@ -79,6 +79,8 @@ Route::get('attendance/{id}','AttendanceSheetController@show');
 Route::delete('attendance/{id}','AttendanceSheetController@delete');
 Route::post('attendance/{id}','AttendanceSheetController@update');
 
+Route::get('attendance_event/{id}','AttendanceSheetController@getEventByTraining');
+
 Route::post('attend_add','AttendanceDetailsController@store');
 Route::delete('attend_del/{id}','AttendanceDetailsController@delete');
 Route::get('attend_list/{id}','AttendanceDetailsController@attendance_list');
