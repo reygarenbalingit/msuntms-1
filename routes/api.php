@@ -43,6 +43,7 @@ Route::group(['middleware' => 'jwt.auth'], function(){
 
 //Route::group(['middleware' => 'jwt.auth'], function(){
 	//ROUTES THAT NEED AUTHENTICATION HERE
+	//sample routes
 //});
 
 Route::get('school', 'SchoolController@index');
