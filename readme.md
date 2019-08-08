@@ -83,6 +83,16 @@ See ERD here (https://prnt.sc/oohxr4)
     Route::delete('trainee/{id}', 'TraineeController@delete');
     Route::get('trainee_all', 'TraineeController@getTraineeData');
 
+    Route::post('attendance', 'AttendanceSheetController@store');
+    Route::get('attendance','AttendanceSheetController@index');
+    Route::get('attendance/{id}','AttendanceSheetController@show');
+    Route::delete('attendance/{id}','AttendanceSheetController@delete');
+    Route::post('attendance/{id}','AttendanceSheetController@update');
+
+    Route::post('attend_add','AttendanceDetailsController@store');
+    Route::delete('attend_del/{id}','AttendanceDetailsController@delete');
+    Route::get('attend_list/{id}','AttendanceDetailsController@attendance_list');
+
     Route::group(['middleware' => 'jwt.auth'], function(){
         Route::post('trainings', 'TrainingController@store');
         Route::get('trainings', 'TrainingController@index');
