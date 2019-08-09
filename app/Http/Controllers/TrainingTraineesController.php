@@ -101,7 +101,7 @@ class TrainingTraineesController extends Controller
     public function getNotSetTraineesToTrainings($id){
         try{
             $list = DB::select('
-                select trainee.id, trainee_lname, trainee_fname, trainee_mname
+                select trainee.id as id, concat(trainee_lname, ' ',trainee_fname,', ') as name
                 from trainee, training_trainees
                 where not exists
                         (
