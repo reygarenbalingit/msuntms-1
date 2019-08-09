@@ -89,8 +89,6 @@ Route::delete('training_trainees/{id}','TrainingTraineesController@delete');
 Route::get('trainee_training_list/{id}','TrainingTraineesController@getTraineesByTraining');
 Route::get('trainee_not_set_trainings/{id}','TrainingTraineesController@getNotSetTraineesToTrainings');
 
-
-
 Route::group(['middleware' => 'jwt.auth'], function(){
 	Route::post('trainings', 'TrainingController@store');
 	Route::get('trainings', 'TrainingController@index');

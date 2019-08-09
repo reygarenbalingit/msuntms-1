@@ -109,10 +109,9 @@ class TrainingTraineesController extends Controller
                         from    training_trainees
                         where   training_trainees.trainee_id = trainee.id
                         ) and
-                training_trainees.training_id = 1
-                group by id;
+                training_trainees.training_id = '.$id.'
+                GROUP BY trainee.id, trainee_lname, trainee_fname, trainee_mname;
             ');
-            
             return response()->json([
                 'success' => true, 
                 'data' => $list,
@@ -121,7 +120,7 @@ class TrainingTraineesController extends Controller
         }catch(Exception $e){
             return response()->json([
                 'success' => false,
-                'message' => 'There was an error with your request. Please try again later.'
+                'message' => $e
             ],422);
         }
     }
