@@ -112,7 +112,7 @@ class TrainingTraineesController extends Controller
                 training_trainees.training_id = 1
                 group by id;
             ');
-            //github
+            
             return response()->json([
                 'success' => true, 
                 'data' => $list,
