@@ -68,7 +68,6 @@ class TraineeController extends Controller
 
     	$v = Validator::make($request->all(), [
     		'trainee_fname' => 'required|unique_with:trainee, trainee_mname, trainee_lname',
-    		'trainee_mname' => 'required',
     		'trainee_lname' => 'required',
     	]);
 
@@ -82,32 +81,32 @@ class TraineeController extends Controller
     		$schoolID = 0;
     		$ecID = 0;
 
-    		if($request->c_flag){
+    		if($request->c_flag === 'true'){
     			$courseID = $request->course_idcourse;
     		}else{
     			$courses = new Courses;
-    			$courses->course_text = $request->c_course_text;
+    			$courses->course_text = $request->course_text;
     			$courses->save();
     			$courseID = $courses->id;
     		}
 
-    		if($request->s_flag){
+    		if($request->s_flag === 'true'){
     			$schoolID = $request->school_idschool;
     		}else{	
     			$schools = new School;
-    			$schools->school_name = $request->s_school_name;
+    			$schools->school_name = $request->school_name;
     			$schools->save();
     			$schoolID = $schools->id;
     		}
 
-    		if($request->ec_flag){
+    		if($request->ec_flag === 'true'){
     			$ecID = $request->emergency_contact;
     		}else{
     			$ec = new EmergencyContacts;
-    			$ec->fname = $request->ec_fname;
-    			$ec->mname = $request->ec_mname;
-    			$ec->lname = $request->ec_lname;
-    			$ec->contact_number = $request->ec_contact_number;
+    			$ec->fname = $request->fname;
+    			$ec->mname = $request->mname;
+    			$ec->lname = $request->lname;
+    			$ec->contact_number = $request->contact_number;
     			$ec->address = $request->ec_address;
     			$ec->save();
     			$ecID = $ec->id;

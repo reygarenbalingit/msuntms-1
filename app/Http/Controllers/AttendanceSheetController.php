@@ -24,7 +24,7 @@ class AttendanceSheetController extends Controller
     public function store(Request $request){
     	
     	$v = Validator::make($request->all(), [
-    		'date_from' => 'required|unique_with:attendance_sheet,date_to',
+    		'date_from' => 'required|unique_with:attendance_sheet,date_to, pte_id',
     	]);
 
     	if($v->fails()){

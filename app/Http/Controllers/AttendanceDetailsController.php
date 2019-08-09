@@ -14,23 +14,24 @@ class AttendanceDetailsController extends Controller
 {
     public function store(Request $request){
     	
-    	$v = Validator::make($request->all(), [
-    		'attend_id' => 'required|unique_with:attendance_details,trainee_Id',
-    	]);
+    	$attend_pass = $request->attendance_sheet_id;
+        $trainee = $request->trainee_id;
 
-    	if($v->fails()){
-    		return response()->json([
-                'success' => false,
-                'message' => 'You already signed the attendance for this event.',
-            ],422);
-    	}else{
-    		$attendace = AttendanceDetails::create($request->all());
-            return response()->json([
-                'success' => true,
-                'data' => $attendace,
-                'message' => 'Attendance added sucessfully.'
-            ], 200);
-    	}	
+        $ttid = DB::selectOne('
+            select training_trainees.id as ttid_sub
+            from training_trainees, trainee
+            where training_trainees.trainee_id = trainee.id AND
+            trainee.id = '.$trainee.' AND
+            training_id = (SELECT pte_id as asid FROM attendance_sheet WHERE id = '.$attend_pass.');
+            ');
+
+		$attendace = $this->attend($attend_pass, $ttid->ttid_sub);
+        return response()->json([
+            'success' => true,
+            'data' => $attendace,
+            'message' => 'Attendance added sucessfully.'
+        ], 200);
+    	
     }
 
     public function delete(Request $request, $id){
@@ -81,5 +82,12 @@ class AttendanceDetailsController extends Controller
                 'message' => 'There was an error in your request. Please try again later.'
             ],422);
         }
+    }
+
+    protected function attend($attend, $training){
+        return AttendanceDetails::create([
+            'attend_id' => $attend,
+            'training_trainees_id' => $training
+        ]);
     }
 }

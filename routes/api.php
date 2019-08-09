@@ -44,7 +44,7 @@ Route::group(['middleware' => 'jwt.auth'], function(){
 //Route::group(['middleware' => 'jwt.auth'], function(){
 	//ROUTES THAT NEED AUTHENTICATION HERE
 	//sample edits
-});
+//});
 
 Route::get('school', 'SchoolController@index');
 Route::get('school/{id}', 'SchoolController@show');
@@ -77,12 +77,16 @@ Route::get('attendance','AttendanceSheetController@index');
 Route::get('attendance/{id}','AttendanceSheetController@show');
 Route::delete('attendance/{id}','AttendanceSheetController@delete');
 Route::post('attendance/{id}','AttendanceSheetController@update');
-
 Route::get('attendance_event/{id}','AttendanceSheetController@getEventByTraining');
 
 Route::post('attend_add','AttendanceDetailsController@store');
 Route::delete('attend_del/{id}','AttendanceDetailsController@delete');
-Route::get('attend_list/{id}','AttendanceDetailsController@attendance_list');
+
+Route::post('training_trainees','TrainingTraineesController@store');
+Route::post('training_trainees/{id}','TrainingTraineesController@update');
+Route::delete('training_trainees/{id}','TrainingTraineesController@delete');
+Route::get('trainee_training_list/{id}','TrainingTraineesController@getTraineesByTraining');
+
 
 
 Route::group(['middleware' => 'jwt.auth'], function(){
