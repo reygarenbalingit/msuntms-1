@@ -82,7 +82,7 @@ class TrainingTraineesController extends Controller
 			from trainee, training, training_trainees
 			where training_trainees.training_id = training.id AND
 			training_trainees.trainee_id = trainee.id AND
-			training_trainees.training_id = 1;
+			training_trainees.training_id = '.$id.';
     		');
     		return response()->json([
     			'success' => true, 
@@ -96,6 +96,33 @@ class TrainingTraineesController extends Controller
     		],422);
     	}
 
+    }
+
+    public function getNotSetTraineesToTrainings($id){
+        try{
+            $list = DB::select('
+                select trainee.id, trainee_lname, trainee_fname, trainee_mname
+                from trainee, training_trainees
+                where not exists
+                        (
+                        select  null
+                        from    training_trainees
+                        where   training_trainees.trainee_id = trainee.id
+                        ) and
+                training_trainees.training_id = 1
+                group by id;
+            ');
+            return response()->json([
+                'success' => true, 
+                'data' => $list,
+                'message' => 'Trainees not set to training extracted successfully.'
+            ],200);
+        }catch(Exception $e){
+            return response()->json([
+                'success' => false,
+                'message' => 'There was an error with your request. Please try again later.'
+            ],422);
+        }
     }
 
     

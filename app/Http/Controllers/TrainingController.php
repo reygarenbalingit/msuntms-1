@@ -153,4 +153,19 @@ class TrainingController extends Controller
             ], 404);
         }
     }
+
+    public function getListOfTrainees($id){
+        $list = DB::select('
+            select trainee_lname, trainee_fname, trainee_mname
+            from trainee, training, training_trainees
+            where training_trainees.trainee_id = trainee.id AND
+            training_trainees.training_id = training.id AND
+            training.id = '.$id.';
+        ');
+        return response()->json([
+            'success' => true,
+            'data' => $list,
+            'message' => 'Trainees for the training extracted sucessfully.'
+        ],200);
+    }
 }
