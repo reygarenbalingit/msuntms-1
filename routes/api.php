@@ -82,6 +82,7 @@ Route::get('attendance_event/{id}','AttendanceSheetController@getEventByTraining
 Route::post('attend_add','AttendanceDetailsController@store');
 Route::delete('attend_del/{id}','AttendanceDetailsController@delete');
 Route::get('attend_list/{id}','AttendanceDetailsController@attendance_list');
+Route::get('unattend_list/{id}','AttendanceDetailsController@notAttendedTrainee');
 
 Route::post('training_trainees','TrainingTraineesController@store');
 Route::post('training_trainees/{id}','TrainingTraineesController@update');

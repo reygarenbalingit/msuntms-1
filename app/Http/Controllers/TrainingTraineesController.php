@@ -109,6 +109,7 @@ class TrainingTraineesController extends Controller
     }
 
     public function getNotSetTraineesToTrainings($id){
+        //param training id
         try{
             $list = DB::select('
                 select trainee.id as tid, trainee_lname, trainee_fname, trainee_mname
