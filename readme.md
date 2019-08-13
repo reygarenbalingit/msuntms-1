@@ -55,7 +55,7 @@ or
     php artisan serve --host <IP address> --port <port_number>
     
 ### Database Schema Model
-See ERD here (https://prnt.sc/opwvds)
+See ERD here (https://prnt.sc/orwraj)
 
 ### API Routes
 
