@@ -14,7 +14,7 @@ class TrainingTraineesController extends Controller
 {
     public function store(Request $request){
     	// $v = Validator::make($request->all(), [
-    	// 	'trainee_id' => 'required|unique_with:training_trainees,training_id',
+    	// 	'trainee_id.*' => 'required|unique_with:training_trainees,training_id',
     	// ]);
 
     	// if($v->fails()){
