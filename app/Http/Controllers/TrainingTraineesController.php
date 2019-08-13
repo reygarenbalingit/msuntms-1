@@ -13,23 +13,39 @@ use Exception;
 class TrainingTraineesController extends Controller
 {
     public function store(Request $request){
-    	$v = Validator::make($request->all(), [
-    		'trainee_id' => 'required|unique_with:training_trainees,training_id',
-    	]);
+    	// $v = Validator::make($request->all(), [
+    	// 	'trainee_id' => 'required|unique_with:training_trainees,training_id',
+    	// ]);
 
-    	if($v->fails()){
-    		return response()->json([
-                'success' => false,
-                'message' => 'Trainee has been already set with a training. Cannot duplicate record.',
-            ],422);
-    	}else{
-    		$tt = TrainingTrainees::create($request->all());
-            return response()->json([
-                'success' => true,
-                'data' => $tt,
-                'message' => 'Trainee set to training successfully.'
-            ], 200);
-    	}	
+    	// if($v->fails()){
+    	// 	return response()->json([
+     //            'success' => false,
+     //            'message' => 'Trainee has been already set with a training. Cannot duplicate record.',
+     //        ],422);
+    	// }else{
+    	// 	$tt = TrainingTrainees::create($request->all());
+     //        return response()->json([
+     //            'success' => true,
+     //            'data' => $tt,
+     //            'message' => 'Trainee set to training successfully.'
+     //        ], 200);
+    	// }	
+        $list = $this->storeTraineeToTraining($request->all());
+        return response()->json([
+            'success' => true,
+            'data' => $list,
+            'message' => 'Trainee set to training successfully.'
+        ], 200);
+    }
+
+    protected function storeTraineeToTraining(array $data, $id){
+        foreach($data as $data){
+            TrainingTrainees::create([
+                'trainee_id' => $data['trainee_id'],
+                'training_id' => $id,
+            ]);
+        }
+            
     }
 
     public function update(Request $request, $id){
@@ -101,7 +117,7 @@ class TrainingTraineesController extends Controller
     public function getNotSetTraineesToTrainings($id){
         try{
             $list = DB::select('
-                select trainee.id, trainee_lname, trainee_fname, trainee_mname
+                select trainee.id as tid, trainee_lname, trainee_fname, trainee_mname
                 from trainee, training_trainees
                 where not exists
                         (
