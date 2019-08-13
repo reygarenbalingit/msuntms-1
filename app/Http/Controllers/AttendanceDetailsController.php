@@ -27,9 +27,22 @@ class AttendanceDetailsController extends Controller
                 ');
 
             $attendace = $this->attend($attend_pass, $ttid->ttid_sub);
+
+            $ret = DB::select('select trainee.id as tid, trainee_lname,trainee_fname,trainee_mname,attendance_details.date as attend_logged_date
+               from trainee, training_trainees, attendance_details, training, attendance_sheet
+               where
+               attendance_details.attend_id = attendance_sheet.id AND
+               attendance_details.training_trainees_id = training_trainees.id AND
+               attendance_sheet.pte_id = training.id AND
+               training_trainees.training_id = training.id AND
+               training_trainees.trainee_id = trainee.id AND
+               attendance_sheet.id = '.$attend_pass.' AND
+               trainee.id = '.$trainee.'
+               order by trainee_lname;
+               ');
             return response()->json([
                 'success' => true,
-                'data' => $attendace,
+                'data' => $ret,
                 'message' => 'Attendance added sucessfully.'
             ], 200);
         }catch(Exception $e){
