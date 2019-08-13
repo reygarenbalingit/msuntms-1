@@ -23,29 +23,23 @@ class TrainingTraineesController extends Controller
      //            'message' => 'Trainee has been already set with a training. Cannot duplicate record.',
      //        ],422);
     	// }else{
-    	// 	$tt = TrainingTrainees::create($request->all());
-     //        return response()->json([
-     //            'success' => true,
-     //            'data' => $tt,
-     //            'message' => 'Trainee set to training successfully.'
-     //        ], 200);
-    	// }	
-        $list = $this->storeTraineeToTraining($request->all());
-        return response()->json([
-            'success' => true,
-            'data' => $list,
-            'message' => 'Trainee set to training successfully.'
-        ], 200);
-    }
-
-    protected function storeTraineeToTraining(array $data, $id){
-        foreach($data as $data){
-            TrainingTrainees::create([
-                'trainee_id' => $data['trainee_id'],
-                'training_id' => $id,
+    		
+    	// }
+        $trainee_ids = $request->trainee_id;
+        $training_id = $request->training_id;
+        
+        foreach($trainee_ids as $trainee_id) {
+            $list = TrainingTrainees::create([
+                'trainee_id' => $trainee_id,
+                'training_id' => $training_id
             ]);
         }
-            
+        return response()->json([
+            'success' => true,
+            'data' => $request->all(),
+            'message' => 'Trainee set to training successfully.'
+        ], 200);	
+        
     }
 
     public function update(Request $request, $id){
