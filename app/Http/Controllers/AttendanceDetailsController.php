@@ -60,6 +60,31 @@ class AttendanceDetailsController extends Controller
         }   
     }
 
+    public function batchStore(Request $request){
+        $attend_pass = $request->attend_id;
+        $training_trainees_id = $request->trainee_id;
+
+        foreach($training_trainees_id as $trainee_id) {
+            $ttid = DB::selectOne('
+            select training_trainees.id as ttid_sub
+            from training_trainees, trainee
+            where training_trainees.trainee_id = trainee.id AND
+            trainee.id = '. $trainee_id .' AND
+            training_id = (SELECT pte_id as asid FROM attendance_sheet WHERE id = '.$attend_pass.');
+            ');
+
+            AttendanceDetails::create([
+                'attend_id' => $attend_pass,
+                'training_trainees_id' => $ttid->ttid_sub
+            ]);
+        }
+        return response()->json([
+            'success' => true,
+            'data' => $request->all(),
+            'message' => 'Batch attendance added successfully.'
+        ], 200);
+    }
+
     public function delete(Request $request, $id){
         try{
             if(!empty(AttendanceDetails::find($id))){
