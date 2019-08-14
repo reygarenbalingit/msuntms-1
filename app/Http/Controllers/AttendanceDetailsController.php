@@ -114,22 +114,58 @@ class AttendanceDetailsController extends Controller
         }
     }
 
-    public function notAttendedTrainee($id){
+    //working pero tanan ang iya i return
+    // public function notAttendedTrainee($id){
+    //     //params attendance_sheet id
+    //     //params training_id
+    //     try{
+    //         $list_unattended = DB::select('
+    //             select t1.id as tid, t1.trainee_lname,t1.trainee_fname, t1.trainee_mname
+    //             from trainee as t1
+    //             where t1.trainee_lname NOT IN
+    //             (select t2.trainee_lname
+    //             from trainee as t2, training_trainees, attendance_details, training, attendance_sheet
+    //             where attendance_details.attend_id = attendance_sheet.id AND
+    //                 attendance_details.training_trainees_id = training_trainees.id AND
+    //                 attendance_sheet.pte_id = training.id AND
+    //                 training_trainees.training_id = training.id AND
+    //                 training_trainees.trainee_id = t2.id AND
+    //                 attendance_sheet.id = '.$id.')
+    //             ORDER BY trainee_lname;
+    //             ');
+    //         return response()->json([
+    //             'success' => true,
+    //             'data' => $list_unattended,
+    //             'message' => 'Unattended trainee list extracted successfully.'
+    //         ], 200);
+    //     }catch(Exception $e){
+    //         return response()->json([
+    //             'success' => $e,
+    //             'message' => 'There was an error in your request. Please try again later.'
+    //         ],422);
+    //     }
+    // }
+
+    public function notAttendedTrainee($sid){
         //params attendance_sheet id
         try{
             $list_unattended = DB::select('
-                select t1.id as tid, t1.trainee_lname,t1.trainee_fname, t1.trainee_mname
-                from trainee as t1
-                where t1.trainee_lname NOT IN
-                (select t2.trainee_lname
-                from trainee as t2, training_trainees, attendance_details, training, attendance_sheet
-                where attendance_details.attend_id = attendance_sheet.id AND
-                    attendance_details.training_trainees_id = training_trainees.id AND
-                    attendance_sheet.pte_id = training.id AND
-                    training_trainees.training_id = training.id AND
-                    training_trainees.trainee_id = t2.id AND
-                    attendance_sheet.id = '.$id.')
-                ORDER BY trainee_lname;
+                Select t1.id as tid, t1.trainee_fname, t1.trainee_mname, t1.trainee_lname
+                from trainee as t1, training_trainees
+                where training_trainees.trainee_id = t1.id AND
+                training_trainees.training_id = (select pte_id from attendance_sheet where id = '.$sid.') AND
+                t1.trainee_lname NOT IN
+                        (select t2.trainee_lname
+                        from trainee as t2, training_trainees, attendance_details, training, attendance_sheet
+                        where
+                        attendance_details.attend_id = attendance_sheet.id AND
+                        attendance_details.training_trainees_id = training_trainees.id AND
+                        attendance_sheet.pte_id = training.id AND
+                        training_trainees.training_id = training.id AND
+                        training_trainees.trainee_id = t2.id AND
+                        attendance_sheet.id = '.$sid.'
+                )
+                ORDER BY t1.trainee_lname;
                 ');
             return response()->json([
                 'success' => true,
@@ -143,9 +179,4 @@ class AttendanceDetailsController extends Controller
             ],422);
         }
     }
-
-    // protected function attend($attend, $training){
-        
-        
-    // }
 }
