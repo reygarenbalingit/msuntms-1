@@ -81,7 +81,7 @@ class TraineeController extends Controller
     		$schoolID = 0;
     		$ecID = 0;
 
-    		if($request->c_flag === 'true'){
+    		if($request->c_flag){
     			$courseID = $request->course_idcourse;
     		}else{
     			$courses = new Courses;
@@ -90,7 +90,7 @@ class TraineeController extends Controller
     			$courseID = $courses->id;
     		}
 
-    		if($request->s_flag === 'true'){
+    		if($request->s_flag){
     			$schoolID = $request->school_idschool;
     		}else{	
     			$schools = new School;
@@ -99,7 +99,7 @@ class TraineeController extends Controller
     			$schoolID = $schools->id;
     		}
 
-    		if($request->ec_flag === 'true'){
+    		if($request->ec_flag){
     			$ecID = $request->emergency_contact;
     		}else{
     			$ec = new EmergencyContacts;
