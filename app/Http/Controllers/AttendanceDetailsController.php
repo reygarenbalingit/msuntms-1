@@ -14,44 +14,51 @@ class AttendanceDetailsController extends Controller
 {
     public function store(Request $request){
     	
-    	try{
-            $attend_pass = $request->attendance_sheet_id;
-            $trainee = $request->trainee_id;
+        $attend_pass = $request->attend_id;
+        $training_trainees_id = $request->trainee_id;
 
-            $ttid = DB::selectOne('
-                select training_trainees.id as ttid_sub
-                from training_trainees, trainee
-                where training_trainees.trainee_id = trainee.id AND
-                trainee.id = '.$trainee.' AND
-                training_id = (SELECT pte_id as asid FROM attendance_sheet WHERE id = '.$attend_pass.');
-                ');
+        $ttid = DB::selectOne('
+            select training_trainees.id as ttid_sub
+            from training_trainees, trainee
+            where training_trainees.trainee_id = trainee.id AND
+            trainee.id = '.$training_trainees_id.' AND
+            training_id = (SELECT pte_id as asid FROM attendance_sheet WHERE id = '.$attend_pass.');
+            ');
 
-            $attendace = $this->attend($attend_pass, $ttid->ttid_sub);
+        //$attendace = $this->attend($attend_pass, $ttid->ttid_sub);
+        $v = Validator::make($request->all(), [
+        'attend_id' => 'required|unique_with:attendance_details,training_trainees_id',
+        ]);
 
-            $ret = DB::select('select trainee.id as tid, trainee_lname,trainee_fname,trainee_mname,attendance_details.date as attend_logged_date
-               from trainee, training_trainees, attendance_details, training, attendance_sheet
-               where
-               attendance_details.attend_id = attendance_sheet.id AND
-               attendance_details.training_trainees_id = training_trainees.id AND
-               attendance_sheet.pte_id = training.id AND
-               training_trainees.training_id = training.id AND
-               training_trainees.trainee_id = trainee.id AND
-               attendance_sheet.id = '.$attend_pass.' AND
-               trainee.id = '.$trainee.'
-               order by trainee_lname;
-               ');
-            return response()->json([
-                'success' => true,
-                'data' => $ret,
-                'message' => 'Attendance added sucessfully.'
-            ], 200);
-        }catch(Exception $e){
+        if($v->fails()){
             return response()->json([
                 'success' => false,
-                'message' => 'You are not allowed to attend this training.'
+                'message' => 'You already singed the attendance.'
             ],422);
-        }
-    	
+        }else{
+            AttendanceDetails::create([
+                'attend_id' => $attend_pass,
+                'training_trainees_id' => $ttid->ttid_sub
+            ]);
+
+            // $ret = DB::select('select trainee.id as tid, trainee_lname,trainee_fname,trainee_mname,attendance_details.date as attend_logged_date
+            // from trainee, training_trainees, attendance_details, training, attendance_sheet
+            // where
+            //    attendance_details.attend_id = attendance_sheet.id AND
+            //    attendance_details.training_trainees_id = training_trainees.id AND
+            //    attendance_sheet.pte_id = training.id AND
+            //    training_trainees.training_id = training.id AND
+            //    training_trainees.trainee_id = trainee.id AND
+            //    attendance_sheet.id = '.$attend_pass.' AND
+            //    trainee.id = '.$trainee.'
+            //    order by trainee_lname;
+            //    ');
+            return response()->json([
+                'success' => true,
+                'data' => ['ot'=>'bar'],
+                'message' => 'Attendance added sucessfully.'
+            ], 200);
+        }   
     }
 
     public function delete(Request $request, $id){
@@ -138,10 +145,8 @@ class AttendanceDetailsController extends Controller
         }
     }
 
-    protected function attend($attend, $training){
-        return AttendanceDetails::create([
-            'attend_id' => $attend,
-            'training_trainees_id' => $training
-        ]);
-    }
+    // protected function attend($attend, $training){
+        
+        
+    // }
 }
