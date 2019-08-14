@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\TrainingTrainees;
+use App\AttendanceDetails;
 use Illuminate\Validation\Rule;
 use Validator, Input, Redirect;
 use Tymon\JWTAuth\JWTAuth;
@@ -63,25 +64,39 @@ class TrainingTraineesController extends Controller
         }
     }
 
-    public function delete(Request $request, $id){
-        try{
-            if(!empty(TrainingTrainees::find($id))){
-                TrainingTrainees::findOrFail($id)->delete();
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Trainee training(s) has been deleted successfully.'
-                ], 200);
-            }else{
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Record does not exist. Cannot delete.'
-                ], 404);
-            }
-        }catch(Exception $e){
+    public function delete(Request $request){
+        $trainee_id = $request->trainee_id;
+        $training_id = $request->training_id;
+
+        $count = DB::selectOne('select id from attendance_details
+        where training_trainees_id = (select training_trainees.id as ttid from training_trainees
+        where trainee_id = '.$trainee_id.' AND
+        training_id = '.$training_id.');');
+
+        if(count($count) === 0){
+            $delid = DB::selectOne('select training_trainees.id as ttid from training_trainees
+            where trainee_id = '.$trainee_id.' AND
+            training_id = '.$training_id.'');
+            TrainingTrainees::findOrFail($delid->ttid)->delete();
             return response()->json([
-                'success' => false,
-                'message' => 'Cannot delete record. This occurs because other users are using this record.'
-            ],422);
+                'success' => true,
+                'message' => 'Trainee has been removed from training successfully.'
+            ], 200);
+        }else{
+            $delida = DB::selectOne('select id from attendance_details
+            where training_trainees_id = (select training_trainees.id as ttid from training_trainees
+            where trainee_id = '.$trainee_id.' AND
+            training_id = '.$training_id.');');
+
+            AttendanceDetails::findOrFail($delida->id)->delete();
+            $delidaa = DB::selectOne('select training_trainees.id as ttid from training_trainees
+            where trainee_id = '.$trainee_id.' AND
+            training_id = '.$training_id.'');
+            TrainingTrainees::findOrFail($delidaa->ttid)->delete();
+            return response()->json([
+                'success' => true,
+                'message' => 'Trainee has been removed from training successfully.'
+            ], 200);
         }
     }
 

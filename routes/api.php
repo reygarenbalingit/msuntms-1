@@ -88,7 +88,7 @@ Route::get('unattend_list/{id}','AttendanceDetailsController@notAttendedTrainee'
 
 Route::post('training_trainees','TrainingTraineesController@store');
 Route::post('training_trainees/{id}','TrainingTraineesController@update');
-Route::delete('training_trainees/{id}','TrainingTraineesController@delete');
+Route::post('training_trainees_del','TrainingTraineesController@delete');
 Route::get('trainee_training_list/{id}','TrainingTraineesController@getTraineesByTraining');
 Route::get('trainee_not_set_trainings/{id}','TrainingTraineesController@getNotSetTraineesToTrainings');
 
