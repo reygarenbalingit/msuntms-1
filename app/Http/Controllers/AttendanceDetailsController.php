@@ -25,7 +25,6 @@ class AttendanceDetailsController extends Controller
             training_id = (SELECT pte_id as asid FROM attendance_sheet WHERE id = '.$attend_pass.');
             ');
 
-        //$attendace = $this->attend($attend_pass, $ttid->ttid_sub);
         $v = Validator::make($request->all(), [
         'attend_id' => 'required|unique_with:attendance_details,training_trainees_id',
         ]);
@@ -41,21 +40,21 @@ class AttendanceDetailsController extends Controller
                 'training_trainees_id' => $ttid->ttid_sub
             ]);
 
-            // $ret = DB::select('select trainee.id as tid, trainee_lname,trainee_fname,trainee_mname,attendance_details.date as attend_logged_date
-            // from trainee, training_trainees, attendance_details, training, attendance_sheet
-            // where
-            //    attendance_details.attend_id = attendance_sheet.id AND
-            //    attendance_details.training_trainees_id = training_trainees.id AND
-            //    attendance_sheet.pte_id = training.id AND
-            //    training_trainees.training_id = training.id AND
-            //    training_trainees.trainee_id = trainee.id AND
-            //    attendance_sheet.id = '.$attend_pass.' AND
-            //    trainee.id = '.$trainee.'
-            //    order by trainee_lname;
-            //    ');
+            $ret = DB::select('select trainee.id as tid, trainee_lname,trainee_fname,trainee_mname,attendance_details.date as attend_logged_date
+            from trainee, training_trainees, attendance_details, training, attendance_sheet
+            where
+               attendance_details.attend_id = attendance_sheet.id AND
+               attendance_details.training_trainees_id = training_trainees.id AND
+               attendance_sheet.pte_id = training.id AND
+               training_trainees.training_id = training.id AND
+               training_trainees.trainee_id = trainee.id AND
+               attendance_sheet.id = '.$attend_pass.' AND
+               trainee.id = '.$training_trainees_id.'
+               order by trainee_lname;
+               ');
             return response()->json([
                 'success' => true,
-                'data' => ['ot'=>'bar'],
+                'data' => $ret,
                 'message' => 'Attendance added sucessfully.'
             ], 200);
         }   
