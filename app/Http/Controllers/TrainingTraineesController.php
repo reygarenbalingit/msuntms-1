@@ -80,22 +80,18 @@ class TrainingTraineesController extends Controller
             TrainingTrainees::findOrFail($delid->ttid)->delete();
             return response()->json([
                 'success' => true,
-                'message' => 'Trainee has been removed from training successfully.'
+                'message' => '[1]Trainee has been removed from training successfully.'
             ], 200);
         }else{
-            $delida = DB::selectOne('select id from attendance_details
-            where training_trainees_id = (select training_trainees.id as ttid from training_trainees
-            where trainee_id = '.$trainee_id.' AND
-            training_id = '.$training_id.');');
-
-            AttendanceDetails::findOrFail($delida->id)->delete();
             $delidaa = DB::selectOne('select training_trainees.id as ttid from training_trainees
             where trainee_id = '.$trainee_id.' AND
             training_id = '.$training_id.'');
+
+            DB::delete('delete from attendance_details where training_trainees_id = '.$delidaa->ttid.'');
             TrainingTrainees::findOrFail($delidaa->ttid)->delete();
             return response()->json([
                 'success' => true,
-                'message' => 'Trainee has been removed from training successfully.'
+                'message' => '[2]Trainee has been removed from training successfully.'
             ], 200);
         }
     }
