@@ -92,6 +92,18 @@ Route::post('training_trainees_del','TrainingTraineesController@delete');
 Route::get('trainee_training_list/{id}','TrainingTraineesController@getTraineesByTraining');
 Route::get('trainee_not_set_trainings/{id}','TrainingTraineesController@getNotSetTraineesToTrainings');
 
+Route::get('questions_list', 'EvalQuestions_C@index');
+Route::post('add_question', 'EvalQuestions_C@store');
+Route::get('show_question/{id}', 'EvalQuestions_C@show');
+Route::post('update_question/{id}', 'EvalQuestions_C@update');
+Route::delete('delete_question/{id}', 'EvalQuestions_C@delete');
+
+Route::post('add_trainee_answer', 'TraineeEvalAns_C@store');
+Route::post('update_trainee_answer', 'TraineeEvalAns_C@update');
+Route::get('trainee_answers_list', 'TraineeEvalAns_C@index');
+Route::get('show_trainee_answer/{id}', 'TraineeEvalAns_C@show');
+Route::delete('delete_trainee_answer/{id}', 'TraineeEvalAns_C@delete');
+
 Route::group(['middleware' => 'jwt.auth'], function(){
 	Route::post('trainings', 'TrainingController@store');
 	Route::get('trainings', 'TrainingController@index');
