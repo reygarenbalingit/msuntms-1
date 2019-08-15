@@ -131,7 +131,8 @@ class TrainingTraineesController extends Controller
                 from trainee as t1
                 where t1.id NOT IN
                 (select training_trainees.trainee_id from training_trainees
-                where training_trainees.training_id = '.$id.');
+                where training_trainees.training_id = '.$id.')
+                order by trainee_lname;
             ');
             return response()->json([
                 'success' => true, 
