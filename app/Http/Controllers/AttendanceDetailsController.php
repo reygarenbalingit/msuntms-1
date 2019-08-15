@@ -14,49 +14,56 @@ class AttendanceDetailsController extends Controller
 {
     public function store(Request $request){
     	
-        $attend_pass = $request->attend_id;
-        $training_trainees_id = $request->trainee_id;
+        try{
+            $attend_pass = $request->attend_id;
+            $training_trainees_id = $request->trainee_id;
 
-        $ttid = DB::selectOne('
-            select training_trainees.id as ttid_sub
-            from training_trainees, trainee
-            where training_trainees.trainee_id = trainee.id AND
-            trainee.id = '.$training_trainees_id.' AND
-            training_id = (SELECT pte_id as asid FROM attendance_sheet WHERE id = '.$attend_pass.');
-            ');
-
-        $v = Validator::make($request->all(), [
-        'attend_id' => 'required|unique_with:attendance_details,training_trainees_id',
-        ]);
-
-        if($v->fails()){
-            return response()->json([
-                'success' => false,
-                'message' => 'You already singed the attendance.'
-            ],422);
-        }else{
-            AttendanceDetails::create([
-                'attend_id' => $attend_pass,
-                'training_trainees_id' => $ttid->ttid_sub
+            $ttid = DB::selectOne('
+                select training_trainees.id as ttid_sub
+                from training_trainees, trainee
+                where training_trainees.trainee_id = trainee.id AND
+                trainee.id = '.$training_trainees_id.' AND
+                training_id = (SELECT pte_id as asid FROM attendance_sheet WHERE id = '.$attend_pass.');
+                ');
+            $tocheck = $ttid->ttid_sub;
+            $v = Validator::make($request->all() + ['check' => $tocheck], [
+            'attend_id' => 'unique_with:attendance_details,check = training_trainees_id',
             ]);
 
-            $ret = DB::select('select trainee.id as tid, trainee_lname,trainee_fname,trainee_mname,attendance_details.date as attend_logged_date
-            from trainee, training_trainees, attendance_details, training, attendance_sheet
-            where
-               attendance_details.attend_id = attendance_sheet.id AND
-               attendance_details.training_trainees_id = training_trainees.id AND
-               attendance_sheet.pte_id = training.id AND
-               training_trainees.training_id = training.id AND
-               training_trainees.trainee_id = trainee.id AND
-               attendance_sheet.id = '.$attend_pass.' AND
-               trainee.id = '.$training_trainees_id.'
-               order by trainee_lname;
-               ');
+            if($v->fails()){
+                return response()->json([
+                    'success' => false,
+                    'message' => 'You already singed the attendance.'
+                ],422);
+            }else{
+                AttendanceDetails::create([
+                    'attend_id' => $attend_pass,
+                    'training_trainees_id' => $ttid->ttid_sub
+                ]);
+
+                $ret = DB::select('select trainee.id as tid, trainee_lname,trainee_fname,trainee_mname,attendance_details.date as attend_logged_date
+                from trainee, training_trainees, attendance_details, training, attendance_sheet
+                where
+                   attendance_details.attend_id = attendance_sheet.id AND
+                   attendance_details.training_trainees_id = training_trainees.id AND
+                   attendance_sheet.pte_id = training.id AND
+                   training_trainees.training_id = training.id AND
+                   training_trainees.trainee_id = trainee.id AND
+                   attendance_sheet.id = '.$attend_pass.' AND
+                   trainee.id = '.$training_trainees_id.'
+                   order by trainee_lname;
+                   ');
+                return response()->json([
+                    'success' => true,
+                    'data' => $ret,
+                    'message' => 'Attendance added sucessfully.'
+                ], 200);
+            }
+        }catch(Exception $e){
             return response()->json([
-                'success' => true,
-                'data' => $ret,
-                'message' => 'Attendance added sucessfully.'
-            ], 200);
+                'success' => false,
+                'message' => 'You are not allowed to sign this attendance.'
+            ], 422);
         }   
     }
 
