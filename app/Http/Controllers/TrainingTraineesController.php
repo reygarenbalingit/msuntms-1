@@ -68,7 +68,7 @@ class TrainingTraineesController extends Controller
         $trainee_id = $request->trainee_id;
         $training_id = $request->training_id;
 
-        $count = DB::selectOne('select id from attendance_details
+        $count = DB::select('select id from attendance_details
         where training_trainees_id = (select training_trainees.id as ttid from training_trainees
         where trainee_id = '.$trainee_id.' AND
         training_id = '.$training_id.');');
@@ -127,16 +127,11 @@ class TrainingTraineesController extends Controller
         //param training id
         try{
             $list = DB::select('
-                select trainee.id as tid, trainee_lname, trainee_fname, trainee_mname
-                from trainee, training_trainees
-                where not exists
-                        (
-                        select  null
-                        from    training_trainees
-                        where   training_trainees.trainee_id = trainee.id
-                        ) and
-                training_trainees.training_id = '.$id.'
-                GROUP BY trainee.id, trainee_lname, trainee_fname, trainee_mname;
+                select t1.id as tid, trainee_fname, trainee_mname, trainee_lname
+                from trainee as t1
+                where t1.id NOT IN
+                (select training_trainees.trainee_id from training_trainees
+                where training_trainees.training_id = '.$id.');
             ');
             return response()->json([
                 'success' => true, 
