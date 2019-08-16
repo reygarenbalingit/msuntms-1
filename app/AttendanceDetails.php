@@ -8,5 +8,5 @@ class AttendanceDetails extends Model
 {
     public $primaryKey = 'id';
 	protected $table = "attendance_details";
-	protected $fillable = ['id','date', 'attend_id', 'training_trainees_id','updated_at', 'created_at'];
+	protected $fillable = ['id','date', 'attendance_sheet_id', 'training_trainees_id','updated_at', 'created_at'];
 }

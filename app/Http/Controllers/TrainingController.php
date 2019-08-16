@@ -111,7 +111,7 @@ class TrainingController extends Controller
             'trainer' => $data['trainer'],
             'date_from' => $data['date_from'],
 			'date_to' => $data['date_to'],
-			'user_id' => auth()->user()->id,
+			'users_id' => auth()->user()->id,
     	]);
     }
 

@@ -30,10 +30,16 @@ class TrainingTraineesController extends Controller
         $training_id = $request->training_id;
         
         foreach($trainee_ids as $trainee_id) {
-            $list = TrainingTrainees::create([
-                'trainee_id' => $trainee_id,
-                'training_id' => $training_id
+            $v = Validator::make($request->all(), [
+             'trainee_id' => 'required|unique_with:training_trainees,training_id',
             ]);
+
+            if(!$v->fails()){
+                $list = TrainingTrainees::create([
+                    'trainee_id' => $trainee_id,
+                    'training_id' => $training_id
+                ]);
+            }
         }
         return response()->json([
             'success' => true,
