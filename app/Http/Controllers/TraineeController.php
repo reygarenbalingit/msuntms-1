@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Courses;
 use App\School;
 use App\EmergencyContacts;
+use App\TrainingTrainees;
 use App\TraineeRegistrationForm;
 use Validator, Input, Redirect;
 use DB;
@@ -82,7 +83,7 @@ class TraineeController extends Controller
     		$ecID = 0;
 
     		if($request->c_flag){
-    			$courseID = $request->course_idcourse;
+    			$courseID = $request->course_id;
     		}else{
     			$courses = new Courses;
     			$courses->course_text = $request->course_text;
@@ -91,7 +92,7 @@ class TraineeController extends Controller
     		}
 
     		if($request->s_flag){
-    			$schoolID = $request->school_idschool;
+    			$schoolID = $request->school_id;
     		}else{	
     			$schools = new School;
     			$schools->school_name = $request->school_name;
@@ -100,7 +101,7 @@ class TraineeController extends Controller
     		}
 
     		if($request->ec_flag){
-    			$ecID = $request->emergency_contact;
+    			$ecID = $request->emergency_contact_id;
     		}else{
     			$ec = new EmergencyContacts;
     			$ec->fname = $request->fname;
@@ -117,11 +118,15 @@ class TraineeController extends Controller
             $trainee->school_name = DB::table('Schools')->where('id', '=', $schoolID)->select('school_name')->get();
             $trainee->e_c = DB::table('emergency_contact')->where('id','=', $ecID)->select('fname as FirstName','mname as MiddleName','lname as LastName')->get();
 
-    		return response()->json([
-    			'success' => true,
-    			'data' => $trainee,
-    			'message' => 'Trainee data has been saved successfully!',
-    		], 200);
+            TrainingTrainees::create([
+                'trainee_id' => $trainee->id,
+                'training_id' => $request->training_id
+            ]);
+            return response()->json([
+             'success' => true,
+             'data' => $trainee,
+             'message' => 'Trainee registration saved successfully!',
+            ], 200);
     	}
     }
 
@@ -215,9 +220,9 @@ class TraineeController extends Controller
 			'trainee_contact_no' => $data['trainee_contact_no'],
 			'required_no_of_hrs' => $data['required_no_of_hrs'],
 			'purpose_of_stay' => $data['purpose_of_stay'],
-			'course_idcourse' => $courseID,
-			'school_idschool' => $schoolID,
-			'emergency_contact' => $ecID,
+			'courses_id' => $courseID,
+			'schools_id' => $schoolID,
+			'emergency_contact_id' => $ecID,
         ]);
     }
 

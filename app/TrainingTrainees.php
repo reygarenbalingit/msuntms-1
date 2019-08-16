@@ -8,5 +8,5 @@ class TrainingTrainees extends Model
 {
     protected $table = "training_trainees";
 	public $primarykey = 'id';
-	protected $fillable = ['id','comment_text','trainee_id', 'training_id','created_at','updated_at'];
+	protected $fillable = ['id','trainee_id', 'training_id','created_at','updated_at'];
 }
