@@ -65,7 +65,8 @@ Route::post('ec', 'EmergencyContactsController@store');
 Route::post('ec/{id}', 'EmergencyContactsController@update');
 Route::delete('ec/{id}', 'EmergencyContactsController@delete');
 
-Route::post('trainee', 'TraineeController@store');
+Route::post('trainee_set_training', 'TraineeController@store'); //register and set to training
+Route::post('trainee', 'TraineeController@store2'); //register only
 Route::get('trainee', 'TraineeController@index');
 Route::get('trainee/{id}', 'TraineeController@getTraineeDataById');
 Route::post('trainee/{id}', 'TraineeController@update');

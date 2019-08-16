@@ -130,6 +130,71 @@ class TraineeController extends Controller
     	}
     }
 
+    public function store2(Request $request){
+
+        $v = Validator::make($request->all(), [
+            'trainee_fname' => 'required|unique_with:trainee, trainee_mname, trainee_lname',
+            'trainee_lname' => 'required',
+        ]);
+
+        if($v->fails()){
+            return response()->json([
+                'success' => false,
+                'message' => $v->errors(),
+            ], 422);
+        }else{
+            $courseID = 0;
+            $schoolID = 0;
+            $ecID = 0;
+
+            if($request->c_flag){
+                $courseID = $request->course_id;
+            }else{
+                $courses = new Courses;
+                $courses->course_text = $request->course_text;
+                $courses->save();
+                $courseID = $courses->id;
+            }
+
+            if($request->s_flag){
+                $schoolID = $request->school_id;
+            }else{  
+                $schools = new School;
+                $schools->school_name = $request->school_name;
+                $schools->save();
+                $schoolID = $schools->id;
+            }
+
+            if($request->ec_flag){
+                $ecID = $request->emergency_contact_id;
+            }else{
+                $ec = new EmergencyContacts;
+                $ec->fname = $request->fname;
+                $ec->mname = $request->mname;
+                $ec->lname = $request->lname;
+                $ec->contact_number = $request->contact_number;
+                $ec->address = $request->ec_address;
+                $ec->save();
+                $ecID = $ec->id;
+            }
+
+            $trainee = $this->create($request->all(), $courseID, $schoolID, $ecID);
+            $trainee->course_text = DB::table('Courses')->where('id', '=', $courseID)->select('course_text')->get();
+            $trainee->school_name = DB::table('Schools')->where('id', '=', $schoolID)->select('school_name')->get();
+            $trainee->e_c = DB::table('emergency_contact')->where('id','=', $ecID)->select('fname as FirstName','mname as MiddleName','lname as LastName')->get();
+
+            // TrainingTrainees::create([
+            //     'trainee_id' => $trainee->id,
+            //     'training_id' => $request->training_id
+            // ]);
+            return response()->json([
+             'success' => true,
+             'data' => $trainee,
+             'message' => 'Trainee registration saved successfully!',
+            ], 200);
+        }
+    }
+
     public function update(Request $request, $id){
     	$trainee = TraineeRegistrationForm::findOrFail($id);
         $v = Validator::make($request->all(), [
@@ -152,25 +217,25 @@ class TraineeController extends Controller
             $trainee->required_no_of_hrs = $request->required_no_of_hrs;
             $trainee->purpose_of_stay = $request->purpose_of_stay;
 
-            if($request->c_flag === 'true'){
-                $trainee->course_idcourse = $request->course_idcourse;
+            if($request->c_flag){
+                $trainee->courses_id = $request->course_id;
             }else{
                 $courses = Courses::create($request->all());
-                $trainee->course_idcourse = $courses->id;
+                $trainee->courses_id = $courses->id;
             }
 
-            if($request->s_flag === 'true'){
-                $trainee->school_idschool = $request->school_idschool;
+            if($request->s_flag){
+                $trainee->schools_id = $request->school_id;
             }else{  
                 $schools = School::create($request->all());
-                $trainee->school_idschool = $schools->id;
+                $trainee->schools_id = $schools->id;
             }
 
-            if($request->ec_flag === 'true'){
-                $trainee->emergency_contact = $request->emergency_contact;
+            if($request->ec_flag){
+                $trainee->emergency_contact_id = $request->emergency_contact_id;
             }else{
                 $ec = EmergencyContacts::create($request->all());
-                $trainee->emergency_contact = $ec->id;
+                $trainee->emergency_contact_id = $ec->id;
             }
 
             $trainee->save();
