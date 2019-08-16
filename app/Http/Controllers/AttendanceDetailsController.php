@@ -23,11 +23,11 @@ class AttendanceDetailsController extends Controller
                 from training_trainees, trainee
                 where training_trainees.trainee_id = trainee.id AND
                 trainee.id = '.$training_trainees_id.' AND
-                training_id = (SELECT training_id as asid FROM attendance_sheet WHERE id = '.$attend_pass.');
+                training_id = (select training_id as asid from attendance_sheet WHERE id = '.$attend_pass.');
                 ');
             $tocheck = $ttid->ttid_sub;
             $v = Validator::make($request->all() + ['check' => $tocheck], [
-            'attend_id' => 'unique_with:attendance_details,check = training_trainees_id',
+            'attendance_sheet_id' => 'unique_with:attendance_details,check = training_trainees_id',
             ]);
 
             if($v->fails()){
@@ -37,8 +37,8 @@ class AttendanceDetailsController extends Controller
                 ],422);
             }else{
                 AttendanceDetails::create([
-                    'attend_id' => $attend_pass,
-                    'training_trainees_id' => $ttid->ttid_sub
+                    'attendance_sheet_id' => $attend_pass,
+                    'training_trainees_id' => $tocheck
                 ]);
 
                 $ret = DB::select('select trainee.id as tid, trainee_lname,trainee_fname,trainee_mname,attendance_details.date as attend_logged_date

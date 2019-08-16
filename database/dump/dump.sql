@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 16, 2019 at 07:35 AM
+-- Generation Time: Aug 16, 2019 at 08:54 AM
 -- Server version: 10.1.26-MariaDB
 -- PHP Version: 7.1.8
 
@@ -51,6 +51,14 @@ CREATE TABLE `attendance_details` (
   `attendance_sheet_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `attendance_details`
+--
+
+INSERT INTO `attendance_details` (`id`, `date`, `created_at`, `updated_at`, `training_trainees_id`, `attendance_sheet_id`) VALUES
+(1, '2019-08-16 06:45:24.29', '2019-08-15 22:45:24', '2019-08-15 22:45:24', 1, 1),
+(3, '2019-08-16 06:48:02.04', '2019-08-15 22:48:01', '2019-08-15 22:48:01', 1, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -66,6 +74,14 @@ CREATE TABLE `attendance_sheet` (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `attendance_sheet`
+--
+
+INSERT INTO `attendance_sheet` (`id`, `attendance_title`, `date_from`, `date_to`, `training_id`, `created_at`, `updated_at`) VALUES
+(1, 'Fishies - Morning', '2019-08-16 00:00:00.00', '2019-08-16 01:00:00.00', 1, '2019-08-15 22:21:34', '2019-08-15 22:21:34'),
+(2, 'Fishies - Afternoon', '2019-08-16 05:00:00.00', '2019-08-16 06:00:00.00', 1, '2019-08-15 22:22:39', '2019-08-15 22:22:39');
 
 -- --------------------------------------------------------
 
@@ -195,7 +211,7 @@ INSERT INTO `schools` (`id`, `school_name`, `created_at`, `updated_at`) VALUES
 CREATE TABLE `trainee` (
   `id` int(11) NOT NULL,
   `trainee_fname` varchar(45) NOT NULL,
-  `trainee_mname` varchar(45) NOT NULL,
+  `trainee_mname` varchar(45) DEFAULT NULL,
   `trainee_lname` varchar(45) NOT NULL,
   `trainee_bdate` date NOT NULL,
   `trainee_home_add` varchar(145) NOT NULL,
@@ -216,9 +232,11 @@ CREATE TABLE `trainee` (
 --
 
 INSERT INTO `trainee` (`id`, `trainee_fname`, `trainee_mname`, `trainee_lname`, `trainee_bdate`, `trainee_home_add`, `trainee_sex`, `trainee_contact_no`, `required_no_of_hrs`, `purpose_of_stay`, `date_submitted`, `courses_id`, `schools_id`, `emergency_contact_id`, `created_at`, `updated_at`) VALUES
-(1, 'Paul Jerome', 'Jaudian', 'hambre', '1999-01-27', 'Naawan, Misamis Oriental', 'Male', '09123456789', 400, 'Doctoral Degree', '2019-08-16 04:19:11.45', 1, 1, 1, '2019-08-15 20:19:11', '2019-08-15 20:19:11'),
-(2, 'Fabian Sr.', 'Rosalejos', 'Eslit', '1961-01-20', 'Naawan, Misamis Oriental', 'Male', '09123456789', 400, 'Doctoral Degree', '2019-08-16 04:20:46.77', 1, 1, 1, '2019-08-15 20:20:46', '2019-08-15 20:20:46'),
-(3, 'Rene', 'Avila', 'Balingit', '1961-01-20', 'Naawan, Misamis Oriental', 'Male', '09123456789', 400, 'Doctoral Degree', '2019-08-16 04:22:03.56', 1, 1, 1, '2019-08-15 20:22:03', '2019-08-15 20:22:03');
+(1, 'Paul Jerome', 'Jaudian', 'Hambre', '1999-01-27', 'Naawan, Misamis Oriental', 'Male', '09123456789', 400, 'Doctoral Degree', '2019-08-16 04:19:11.45', 1, 1, 1, '2019-08-15 20:19:11', '2019-08-16 05:52:56'),
+(2, 'Fabian Sr.', 'Rosalejos', 'Eslit', '1961-01-20', 'Naawan, Misamis Oriental', 'Male', '09123456789', 400, 'Doctoral Degree', '2019-08-16 04:20:46.77', 1, 1, 1, '2019-08-15 20:20:46', '2019-08-16 05:52:26'),
+(3, 'Rene', 'Avila', 'Balingit', '1961-01-20', 'Naawan, Misamis Oriental', 'Male', '09123456789', 400, 'Doctoral Degree', '2019-08-16 04:22:03.56', 1, 1, 1, '2019-08-15 20:22:03', '2019-08-16 05:52:33'),
+(4, 'Axelle', NULL, 'Taleon', '1961-01-20', 'Naawan, Misamis Oriental', 'Male', '09123456789', 400, 'Doctoral Degree', '2019-08-16 05:53:29.99', 1, 1, 1, '2019-08-15 21:53:29', '2019-08-15 21:53:29'),
+(5, 'Derkwin', 'IDK', 'Dela Cerna', '1961-01-20', 'Naawan, Misamis Oriental', 'Male', '09123456789', 400, 'Doctoral Degree', '2019-08-16 05:54:24.97', 1, 1, 1, '2019-08-15 21:54:24', '2019-08-15 22:04:37');
 
 -- --------------------------------------------------------
 
@@ -408,12 +426,12 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `attendance_details`
 --
 ALTER TABLE `attendance_details`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `attendance_sheet`
 --
 ALTER TABLE `attendance_sheet`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `comments`
 --
@@ -453,7 +471,7 @@ ALTER TABLE `schools`
 -- AUTO_INCREMENT for table `trainee`
 --
 ALTER TABLE `trainee`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT for table `training`
 --
