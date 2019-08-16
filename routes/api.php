@@ -46,24 +46,27 @@ Route::group(['middleware' => 'jwt.auth'], function(){
 	//sample edits
 //});
 
+//routes crud for schools
 Route::get('school', 'SchoolController@index');
 Route::get('school/{id}', 'SchoolController@show');
 Route::post('school', 'SchoolController@store');
 Route::post('school/{id}', 'SchoolController@update');
 Route::delete('school/{id}', 'SchoolController@delete');
 
-
+//routes crud for courses
 Route::get('course', 'CoursesController@index');
 Route::get('course/{id}', 'CoursesController@show');
 Route::post('course', 'CoursesController@store');
 Route::post('course/{id}', 'CoursesController@update');
 Route::delete('course/{id}', 'CoursesController@delete');
 
+//routes crud for emergeny contact persons
 Route::get('ec', 'EmergencyContactsController@index');
 Route::get('ec/{id}', 'EmergencyContactsController@show');
 Route::post('ec', 'EmergencyContactsController@store');
 Route::post('ec/{id}', 'EmergencyContactsController@update');
 Route::delete('ec/{id}', 'EmergencyContactsController@delete');
+
 
 Route::post('trainee_set_training', 'TraineeController@store'); //register and set to training
 Route::post('trainee', 'TraineeController@store2'); //register only
@@ -73,6 +76,7 @@ Route::post('trainee/{id}', 'TraineeController@update');
 Route::delete('trainee/{id}', 'TraineeController@delete');
 Route::get('trainee_all', 'TraineeController@getTraineeData');
 
+//routes crud for attendance sheet
 Route::post('attendance', 'AttendanceSheetController@store');
 Route::get('attendance','AttendanceSheetController@index');
 Route::get('attendance/{id}','AttendanceSheetController@show');
@@ -80,9 +84,9 @@ Route::delete('attendance/{id}','AttendanceSheetController@delete');
 Route::post('attendance/{id}','AttendanceSheetController@update');
 Route::get('attendance_event/{id}','AttendanceSheetController@getEventByTraining');
 
-Route::post('attend_add','AttendanceDetailsController@store');
-Route::post('attend_batch','AttendanceDetailsController@batchStore');
-
+//routes for attendance_add | sign in attendance
+Route::post('attend_add','AttendanceDetailsController@store'); //individual sign in
+Route::post('attend_batch','AttendanceDetailsController@batchStore'); //batch sign in
 Route::delete('attend_del/{id}','AttendanceDetailsController@delete');
 Route::get('attend_list/{id}','AttendanceDetailsController@attendance_list');
 Route::get('unattend_list/{id}','AttendanceDetailsController@notAttendedTrainee');
