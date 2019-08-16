@@ -107,7 +107,7 @@ class AttendanceSheetController extends Controller
             select attendance_sheet.id as id, attendance_sheet.attendance_title as title,attendance_sheet.date_from as start,
             attendance_sheet.date_to as end
             from attendance_sheet, training
-            where attendance_sheet.pte_id = training.id AND
+            where attendance_sheet.training_id = training.id AND
             training.id = '.$id.';
             ');
             return response()->json([

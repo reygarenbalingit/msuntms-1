@@ -23,7 +23,7 @@ class AttendanceDetailsController extends Controller
                 from training_trainees, trainee
                 where training_trainees.trainee_id = trainee.id AND
                 trainee.id = '.$training_trainees_id.' AND
-                training_id = (SELECT pte_id as asid FROM attendance_sheet WHERE id = '.$attend_pass.');
+                training_id = (SELECT training_id as asid FROM attendance_sheet WHERE id = '.$attend_pass.');
                 ');
             $tocheck = $ttid->ttid_sub;
             $v = Validator::make($request->all() + ['check' => $tocheck], [
@@ -44,9 +44,9 @@ class AttendanceDetailsController extends Controller
                 $ret = DB::select('select trainee.id as tid, trainee_lname,trainee_fname,trainee_mname,attendance_details.date as attend_logged_date
                 from trainee, training_trainees, attendance_details, training, attendance_sheet
                 where
-                   attendance_details.attend_id = attendance_sheet.id AND
+                   attendance_details.attendance_sheet_id = attendance_sheet.id AND
                    attendance_details.training_trainees_id = training_trainees.id AND
-                   attendance_sheet.pte_id = training.id AND
+                   attendance_sheet.training_id = training.id AND
                    training_trainees.training_id = training.id AND
                    training_trainees.trainee_id = trainee.id AND
                    attendance_sheet.id = '.$attend_pass.' AND
@@ -77,7 +77,7 @@ class AttendanceDetailsController extends Controller
             from training_trainees, trainee
             where training_trainees.trainee_id = trainee.id AND
             trainee.id = '. $trainee_id .' AND
-            training_id = (SELECT pte_id as asid FROM attendance_sheet WHERE id = '.$attend_pass.');
+            training_id = (SELECT training_id as asid FROM attendance_sheet WHERE id = '.$attend_pass.');
             ');
 
             AttendanceDetails::create([
@@ -125,9 +125,9 @@ class AttendanceDetailsController extends Controller
                 attend_logged_date
                 from trainee, training_trainees, attendance_details, training, attendance_sheet
                 where
-                attendance_details.attend_id = attendance_sheet.id AND
+                attendance_details.attendance_sheet_id = attendance_sheet.id AND
                 attendance_details.training_trainees_id = training_trainees.id AND
-                attendance_sheet.pte_id = training.id AND
+                attendance_sheet.training_id = training.id AND
                 training_trainees.training_id = training.id AND
                 training_trainees.trainee_id = trainee.id AND
                 attendance_sheet.id = '.$id.'
@@ -182,17 +182,17 @@ class AttendanceDetailsController extends Controller
         //params attendance_sheet id
         try{
             $list_unattended = DB::select('
-                Select t1.id as tid, t1.trainee_fname, t1.trainee_mname, t1.trainee_lname
+                select t1.id as tid, t1.trainee_fname, t1.trainee_mname, t1.trainee_lname
                 from trainee as t1, training_trainees
                 where training_trainees.trainee_id = t1.id AND
-                training_trainees.training_id = (select pte_id from attendance_sheet where id = '.$sid.') AND
+                training_trainees.training_id = (select training_id from attendance_sheet where id = '.$sid.') AND
                 t1.trainee_lname NOT IN
                         (select t2.trainee_lname
                         from trainee as t2, training_trainees, attendance_details, training, attendance_sheet
                         where
-                        attendance_details.attend_id = attendance_sheet.id AND
+                        attendance_details.attendance_sheet_id = attendance_sheet.id AND
                         attendance_details.training_trainees_id = training_trainees.id AND
-                        attendance_sheet.pte_id = training.id AND
+                        attendance_sheet.training_id = training.id AND
                         training_trainees.training_id = training.id AND
                         training_trainees.trainee_id = t2.id AND
                         attendance_sheet.id = '.$sid.'
